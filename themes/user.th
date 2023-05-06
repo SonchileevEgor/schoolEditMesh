@@ -1,0 +1,10 @@
+{
+  "name": "Пользователь",
+  "carcassFiguresColor": {"R": 0,"G": 0,"B": 0},
+  "facetsFiguresColor": {"R": 0.6,"G": 0.85,"B": 0.92},
+  "fontColor": {"R": 0.1,"G": 0.1,"B": 0.1},
+  "xAxis": {"R": 1,"G": 0,"B": 0},
+  "yAxis": {"R": 0.8,"G": 0.5,"B": 0.25},
+  "zAxis": {"R": 0,"G": 0,"B": 1},
+  "pointsColor": {"R": 0,"G": 0,"B": 0}
+}

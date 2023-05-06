@@ -1,0 +1,14 @@
+[
+{"type":"Point","id":"A","params":{"x":-2.0113636363636362,"y":-0.42045454545454547,"z":0}},
+{"type":"Point","id":"B","params":{"x":1.6818181818181819,"y":2.090909090909091,"z":0}},
+{"type":"Point","id":"C","params":{"x":2.034090909090909,"y":-1.9431818181818181,"z":0}},
+{"type":"Point","id":"D","params":{"x":0.13780588123704346,"y":-0.2236797197672662,"z":3.9738691244880657}},
+{"type":"Tetrahedron","id":"DCBA","params":{"A":"D.P","B":"C.P","C":"B.P","D":"A.P"}},
+{"type":"DefaultPlane","id":"pl","params":{}},
+{"type":"PointOnPlaneProjection","id":"Pr","params":{"point":"D.P","plane":"pl"}},
+{"type":"Rib","id":"AC","params":{"A":"A.P","B":"C.P"}},
+{"type":"PointOnRibProjection","id":"H","params":{"point":"D.P","rib":"AC"}},
+{"type":"Rib","id":"HPr","params":{"A":"DH.B","B":"DPr.B"}},
+{"type":"Rib","id":"PrC","params":{"A":"DPr.B","B":"C.P"}},
+{"type":"Rib","id":"PrA","params":{"A":"DPr.B","B":"A.P"}}
+]

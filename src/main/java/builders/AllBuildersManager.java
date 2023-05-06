@@ -1,0 +1,502 @@
+package builders;
+
+import editor.i_BodyBuilder;
+import minjson.JsonObject;
+import util.Fatal;
+
+/**
+ * The compound creator of all types of bodies by its type and parameters.
+ *
+ * @author lt
+ */
+public class AllBuildersManager {
+
+  /**
+   * Билдер по алиасу.
+   * @param alias
+   * @return
+   */
+  private static Class builder(String alias) {
+    switch (alias) {
+      case SquareByTwoPoints2dBuilder.ALIAS:
+        return SquareByTwoPoints2dBuilder.class;
+      case SphereByTwoPointsBuilder.ALIAS:
+        return SphereByTwoPointsBuilder.class;
+      case PolygonFromAnchorBuilder.ALIAS:
+        return PolygonFromAnchorBuilder.class;
+      case RibFromAnchorBuilder.ALIAS:
+        return RibFromAnchorBuilder.class;
+      case PointBuilder.ALIAS:
+        return PointBuilder.class;
+      case PointBuilderHull2.ALIAS:
+        return PointBuilderHull2.class;
+      case PointBuilderHull3.ALIAS:
+        return PointBuilderHull3.class;
+      case RibBuilder.ALIAS:
+        return RibBuilder.class;
+      case TetrahedronBuilder.ALIAS:
+        return TetrahedronBuilder.class;
+      case CircleInPolygonBuilder.ALIAS:
+        return CircleInPolygonBuilder.class;
+      case RayTwoPointsBuilder.ALIAS:
+        return RayTwoPointsBuilder.class;
+      case CircleByConeSphereBuilder.ALIAS:
+        return CircleByConeSphereBuilder.class;
+      case CircleByCylinderSphereBuilder.ALIAS:
+        return CircleByCylinderSphereBuilder.class;
+      case CircleOutPolygonBuilder.ALIAS:
+        return CircleOutPolygonBuilder.class;
+      case CircleCenterRadiusBuilder.ALIAS:
+        return CircleCenterRadiusBuilder.class;
+      case CircleCenterPointBuilder.ALIAS:
+        return CircleCenterPointBuilder.class;
+      case CircleByPlaneBuilder.ALIAS:
+        return CircleByPlaneBuilder.class;
+      case LineByPointOnCircle2dBuilder.ALIAS:
+        return LineByPointOnCircle2dBuilder.class;
+      case ConeBuilder.ALIAS:
+        return ConeBuilder.class;
+      case ConeByCircleAndVertexBuilder.ALIAS:
+        return ConeByCircleAndVertexBuilder.class;
+      case CubeBuilder.ALIAS:
+        return CubeBuilder.class;
+      case CubeByTwoPointsAndAngleBuilder.ALIAS:
+        return CubeByTwoPointsAndAngleBuilder.class;
+      case CubeSectionBuilder.ALIAS:
+        return CubeSectionBuilder.class;
+      case ConeSectionBuilder.ALIAS:
+        return ConeSectionBuilder.class;
+      case DefaultPlaneBuilder.ALIAS:
+        return DefaultPlaneBuilder.class;
+      case DivideRibInRelationBuilder.ALIAS:
+        return DivideRibInRelationBuilder.class;
+      case SphereBuilder.ALIAS:
+        return SphereBuilder.class;
+      case SphereInCubeBuilder.ALIAS:
+        return SphereInCubeBuilder.class;
+      case SphereOutCubeBuilder.ALIAS:
+        return SphereOutCubeBuilder.class;
+      case SphereInTetrahedronBuilder.ALIAS:
+        return SphereInTetrahedronBuilder.class;
+      case SphereOutTetrahedronBuilder.ALIAS:
+        return SphereOutTetrahedronBuilder.class;
+      case SphereInConeBuilder.ALIAS:
+        return SphereInConeBuilder.class;
+      case SphereInEllipsoidBuilder.ALIAS:
+        return SphereInEllipsoidBuilder.class;
+      case SphereOutConeBuilder.ALIAS:
+        return SphereOutConeBuilder.class;
+      case SphereOutEllipsoidBuilder.ALIAS:
+          return SphereOutEllipsoidBuilder.class;
+      case SphereOutPrismBuilder.ALIAS:
+        return SphereOutPrismBuilder.class;
+      case SphereOutPyramidBuilder.ALIAS:
+        return SphereOutPyramidBuilder.class;
+      case SphereByFourPointsBuilder.ALIAS:
+        return SphereByFourPointsBuilder.class;
+      case SphereOnPlaneProjectionBuilder.ALIAS:
+        return SphereOnPlaneProjectionBuilder.class;
+      case LineOnPlaneProjectionBuilder.ALIAS:
+          return LineOnPlaneProjectionBuilder.class;
+      case RibOnPlaneProjectionBuilder.ALIAS:
+          return RibOnPlaneProjectionBuilder.class;
+      case SphereXSphereBuilder.ALIAS:
+        return SphereXSphereBuilder.class;
+      case CircleByThreePointsBuilder.ALIAS:
+        return CircleByThreePointsBuilder.class;
+      case TangentPointCircleLineBuilder.ALIAS:
+        return TangentPointCircleLineBuilder.class;
+      case TangentPointCircleRibBuilder.ALIAS:
+        return TangentPointCircleRibBuilder.class;
+      case TangentRib2dBuilder.ALIAS:
+        return TangentRib2dBuilder.class;
+      case PlaneBuilder.ALIAS:
+        return PlaneBuilder.class;
+      case PlaneThreePointsBuilder.ALIAS:
+        return PlaneThreePointsBuilder.class;
+      case PlaneByPointAndLineBuilder.ALIAS:
+        return PlaneByPointAndLineBuilder.class;
+      case PlaneByPointParallelPlaneBuilder.ALIAS:
+        return PlaneByPointParallelPlaneBuilder.class;
+      case PlaneParalLineByPointBuilder.ALIAS:
+        return PlaneParalLineByPointBuilder.class;
+      case PlaneByPointParallelPolygonBuilder.ALIAS:
+        return PlaneByPointParallelPolygonBuilder.class;
+      case PlaneByLineParallelPlaneBuilder.ALIAS:
+        return PlaneByLineParallelPlaneBuilder.class;
+      case PlaneByLineParallelPolygonBuilder.ALIAS:
+        return PlaneByLineParallelPolygonBuilder.class;
+      case PlaneByLineAndAngleAtPlaneBuilder.ALIAS:
+        return PlaneByLineAndAngleAtPlaneBuilder.class;
+      case PlaneByLineAndAngleAtPolyBuilder.ALIAS:
+        return PlaneByLineAndAngleAtPolyBuilder.class;
+      case PlaneBySkewLinesBuilder.ALIAS:
+        return PlaneBySkewLinesBuilder.class;
+      case PlaneByPointParallelCircleBuilder.ALIAS:
+        return PlaneByPointParallelCircleBuilder.class;
+      case PlaneByLineParallelCircleBuilder.ALIAS:
+        return PlaneByLineParallelCircleBuilder.class;
+      case PlaneByPointOrthLineBuilder.ALIAS:
+         return PlaneByPointOrthLineBuilder.class;
+      case PlaneByPointOrthRibBuilder.ALIAS:
+         return PlaneByPointOrthRibBuilder.class;
+      case PlaneByPointOrthRayBuilder.ALIAS:
+         return PlaneByPointOrthRayBuilder.class;
+      case PlaneByLineOrthLineBuilder.ALIAS:
+         return PlaneByLineOrthLineBuilder.class;
+      case PlaneByLineOrthRibBuilder.ALIAS:
+         return PlaneByLineOrthRibBuilder.class;
+      case PlaneByLineOrthRayBuilder.ALIAS:
+         return PlaneByLineOrthRayBuilder.class;
+      case PlaneByLineOrthogonalDiskBuilder.ALIAS:
+        return PlaneByLineOrthogonalDiskBuilder .class;
+      case PlaneByPointOrthDiskBuilder.ALIAS:
+        return PlaneByPointOrthDiskBuilder .class;
+      case PlaneByAnchorBuilder.ALIAS:
+         return PlaneByAnchorBuilder.class;
+      case PolygonBuilder.ALIAS:
+        return PolygonBuilder.class;
+      case SphereSectionBuilder.ALIAS:
+        return SphereSectionBuilder.class;
+      case TetrahedronSectionBuilder.ALIAS:
+        return TetrahedronSectionBuilder.class;
+      case PyramidBuilder.ALIAS:
+        return PyramidBuilder.class;
+      case PointOnRibProjectionBuilder.ALIAS:
+        return PointOnRibProjectionBuilder.class;
+      case PointOnLineProjectionBuilder.ALIAS:
+        return PointOnLineProjectionBuilder.class;
+      case PointOnPlaneProjectionBuilder.ALIAS:
+        return PointOnPlaneProjectionBuilder.class;
+      case ProjOnRibAnchorBuilder.ALIAS:
+        return ProjOnRibAnchorBuilder.class;
+      case ProjOnPolyAnchorBuilder.ALIAS:
+        return ProjOnPolyAnchorBuilder.class;
+      case RegularPolygonBuilder.ALIAS:
+        return RegularPolygonBuilder.class;
+      case PyramidRegularBuilder.ALIAS:
+        return PyramidRegularBuilder.class;
+      case PyramidSectionBuilder.ALIAS:
+        return PyramidSectionBuilder.class;
+      case PrismBuilder.ALIAS:
+        return PrismBuilder.class;
+      case PrismByBaseAndTopBuilder.ALIAS:
+        return PrismByBaseAndTopBuilder.class;
+      case PrismRegularBuilder.ALIAS:
+        return PrismRegularBuilder.class;
+      case PointOnPolyAnchorBuilder.ALIAS:
+        return PointOnPolyAnchorBuilder.class;
+      case PointOnSphereBuilder.ALIAS:
+        return PointOnSphereBuilder.class;
+      case PointOnDiskBuilder.ALIAS:
+        return PointOnDiskBuilder.class;
+      case PointOnPlaneBuilder.ALIAS:
+        return PointOnPlaneBuilder.class;
+      case PrismSectionBuilder.ALIAS:
+        return PrismSectionBuilder.class;
+      case PyramidByBaseAndTopBuilder.ALIAS:
+        return PyramidByBaseAndTopBuilder.class;
+      case PyramidRectangBuilder.ALIAS:
+        return PyramidRectangBuilder.class;
+      case RectangularParallelepipedBuilder.ALIAS:
+        return RectangularParallelepipedBuilder.class;
+      case TriangleBuilder.ALIAS:
+        return TriangleBuilder.class;
+      case MedianBuilder.ALIAS:
+        return MedianBuilder.class;
+      case HeightBuilder.ALIAS:
+        return HeightBuilder.class;
+      case BisectrixBuilder.ALIAS:
+        return BisectrixBuilder.class;
+      case BisectrixOfAngle2DBuilder.ALIAS:
+        return BisectrixOfAngle2DBuilder.class;
+      case MiddlePerpendicularBuilder.ALIAS:
+        return MiddlePerpendicularBuilder.class;
+      case MiddlePerpendicularToRibBuilder.ALIAS:
+        return MiddlePerpendicularToRibBuilder.class;
+      case LineByTwoPointsBuilder.ALIAS:
+        return LineByTwoPointsBuilder.class;
+      case ExCircleBuilder.ALIAS:
+        return ExCircleBuilder.class;
+      case CircleInAngleBuilder.ALIAS:
+        return CircleInAngleBuilder.class;
+      case CircleInTriangleBuilder.ALIAS:
+        return CircleInTriangleBuilder.class;
+      case CircleOutTriangleBuilder.ALIAS:
+        return CircleOutTriangleBuilder.class;
+      case CylinderBuilder.ALIAS:
+        return CylinderBuilder.class;
+      case CylinderSectionBuilder.ALIAS:
+        return CylinderSectionBuilder.class;
+      case TangentFromPointToCircleBuilder.ALIAS:
+        return TangentFromPointToCircleBuilder.class;
+      case LineParallelLineBuilder.ALIAS:
+        return LineParallelLineBuilder.class;
+      case LineParallelRibBuilder.ALIAS:
+        return LineParallelRibBuilder.class;
+      case LineParallelRayBuilder.ALIAS:
+        return LineParallelRayBuilder.class;
+      case LineParallelPlaneBuilder.ALIAS:
+        return LineParallelPlaneBuilder.class;
+      case LineParalPlaneByAngleBuilder.ALIAS:
+        return LineParalPlaneByAngleBuilder.class;
+      case LineOrthogonalLineBuilder.ALIAS:
+        return LineOrthogonalLineBuilder.class;
+      case LineOrthogonalRibBuilder.ALIAS:
+        return LineOrthogonalRibBuilder.class;
+      case LineOrthogonalRayBuilder.ALIAS:
+        return LineOrthogonalRayBuilder.class;
+      case LineOrthogonalLine2dBuilder.ALIAS:
+        return LineOrthogonalLine2dBuilder.class;
+      case LineOrthogonalRib2dBuilder.ALIAS:
+        return LineOrthogonalRib2dBuilder.class;
+      case LineOrthogonalRay2dBuilder.ALIAS:
+        return LineOrthogonalRay2dBuilder.class;
+      case LineOrthogonalPlaneBuilder.ALIAS:
+        return LineOrthogonalPlaneBuilder.class;
+      case LineOrthPolyOrCircleBuilder.ALIAS:
+        return LineOrthPolyOrCircleBuilder.class;
+      case LineXLineBuilder.ALIAS:
+        return LineXLineBuilder.class;
+      case LineXRibBuilder.ALIAS:
+        return LineXRibBuilder.class;
+      case RibXRibBuilder.ALIAS:
+        return RibXRibBuilder.class;
+      case RibXPlaneBuilder.ALIAS:
+        return RibXPlaneBuilder.class;
+      case RibBetweenSkewLinesBuilder.ALIAS:
+        return RibBetweenSkewLinesBuilder.class;
+      case LineXPlaneBuilder.ALIAS:
+        return LineXPlaneBuilder.class;
+      case PlaneXPlaneBuilder.ALIAS:
+        return PlaneXPlaneBuilder.class;
+      case CircleXCircleBuilder.ALIAS:
+        return CircleXCircleBuilder.class;
+      case SphereOutCylinderBuilder.ALIAS:
+        return SphereOutCylinderBuilder.class;
+      case SphereInCylinderBuilder.ALIAS:
+        return SphereInCylinderBuilder.class;
+      case LineXCylinderBuilder.ALIAS:
+        return LineXCylinderBuilder.class;
+      case LineXConeBuilder.ALIAS:
+        return LineXConeBuilder.class;
+      case OutTangentForTwoCirclesBuilder.ALIAS:
+        return OutTangentForTwoCirclesBuilder.class;
+      case PlaneByPointOrthPlaneBuilder.ALIAS:
+        return PlaneByPointOrthPlaneBuilder.class;
+       case PlaneByLineOrthogonalPlaneBuilder.ALIAS:
+        return PlaneByLineOrthogonalPlaneBuilder.class;
+      case PlaneByLineOrthPolyBuilder.ALIAS:
+        return PlaneByLineOrthPolyBuilder.class;
+      case PlaneByPointOrthPolyBuilder.ALIAS:
+        return PlaneByPointOrthPolyBuilder.class;
+      case ArcBuilder.ALIAS:
+        return ArcBuilder.class;
+      case LineXSphereBuilder.ALIAS:
+        return LineXSphereBuilder.class;
+      case LineXEllipsoidBuilder.ALIAS:
+        return LineXSphereBuilder.class;
+      case PointOnRibAnchorBuilder.ALIAS:
+        return PointOnRibAnchorBuilder.class;
+      case RibXPolyBuilder.ALIAS:
+        return RibXPolyBuilder.class;
+      case TangentPointSpherePlaneBuilder.ALIAS:
+        return TangentPointSpherePlaneBuilder.class;
+      case TangentPointSphereFacetBuilder.ALIAS:
+        return TangentPointSphereFacetBuilder.class;
+      case TangentPlaneInPointOnSphereBuilder.ALIAS:
+        return TangentPlaneInPointOnSphereBuilder.class;
+      case LineXPolyBuilder.ALIAS:
+        return LineXPolyBuilder.class;
+      case PolyXPolyBuilder.ALIAS:
+        return PolyXPolyBuilder.class;
+      case PolyXPlaneBuilder.ALIAS:
+        return PolyXPlaneBuilder.class;
+      case PointOnLineBuilder.ALIAS:
+        return PointOnLineBuilder.class;
+      case LineXRoundBuilder.ALIAS:
+        return LineXRoundBuilder.class;
+      case RectangleBuilder.ALIAS:
+        return RectangleBuilder.class;
+      case RectTriangleBuilder.ALIAS:
+        return RectTriangleBuilder.class;
+      case ParallelogramBuilder.ALIAS:
+        return ParallelogramBuilder.class;
+      case TrapezeBuilder.ALIAS:
+        return TrapezeBuilder.class;
+      case AngleByThreePointsBuilder.ALIAS:
+        return AngleByThreePointsBuilder.class;
+      case AngleByTwoPointsBuilder.ALIAS:
+      return AngleByTwoPointsBuilder.class;
+      case RhombusBySideAngleBuilder.ALIAS:
+        return RhombusBySideAngleBuilder.class;
+      case RhombusByDiagonalBuilder.ALIAS:
+        return RhombusByDiagonalBuilder.class;
+      case PointOnCircleBuilder.ALIAS:
+        return PointOnCircleBuilder.class;
+      case PointOnArcByAngleBuilder.ALIAS:
+        return PointOnArcByAngleBuilder.class;
+      case PointOnArcByRatioBuilder.ALIAS:
+        return PointOnArcByRatioBuilder.class;
+      case IntersectionBuilder.ALIAS:
+        return IntersectionBuilder.class;
+      case SymmetryPlaneBuilder.ALIAS:
+        return SymmetryPlaneBuilder.class;
+      case SymmetryLineBuilder.ALIAS:
+        return SymmetryLineBuilder.class;
+      case SymmetryPointBuilder.ALIAS:
+        return SymmetryPointBuilder.class;
+      case HomothetyBuilder.ALIAS:
+        return HomothetyBuilder.class;
+      case RotationBuilder.ALIAS:
+        return RotationBuilder .class;
+      case Inversion2dBuilder.ALIAS:
+        return Inversion2dBuilder .class;
+      case TranslationBuilder.ALIAS:
+        return TranslationBuilder .class;
+      case DodecahedronBuilder.ALIAS:
+        return DodecahedronBuilder.class;
+      case IcosahedronBuilder.ALIAS:
+        return IcosahedronBuilder.class;
+      case OctahedronBuilder.ALIAS:
+        return OctahedronBuilder.class;
+      case ElongatedDodecahedronBuilder.ALIAS:
+        return ElongatedDodecahedronBuilder.class;
+      case TruncatedOctahedronBuilder.ALIAS:
+        return TruncatedOctahedronBuilder.class;
+      case RhombicDodecahedronBuilder.ALIAS:
+        return RhombicDodecahedronBuilder.class;
+      case EllipseMainBuilder.ALIAS:
+        return EllipseMainBuilder.class;
+      case ParabolaBuilder.ALIAS:
+        return ParabolaBuilder.class;
+      case HyperboleBuilder.ALIAS:
+        return HyperboleBuilder.class;
+      case RegTetrahedronBuilder.ALIAS:
+        return RegTetrahedronBuilder.class;
+      case ArcOnCircleBuilder.ALIAS:
+        return ArcOnCircleBuilder.class;
+      case HalfCircBuilder.ALIAS:
+        return HalfCircBuilder.class;
+      case BisectorPlaneOf2PlanesBuilder.ALIAS:
+        return BisectorPlaneOf2PlanesBuilder.class;
+      case SphereInPyramidBuilder.ALIAS:
+        return SphereInPyramidBuilder.class;
+      case SphereInPrismBuilder.ALIAS:
+        return SphereInPrismBuilder.class;
+      case SphereInOctahedronBuilder.ALIAS:
+        return SphereInOctahedronBuilder.class;
+      case SphereInIcosahedronBuilder.ALIAS:
+        return SphereInIcosahedronBuilder.class;
+      case SphereInDodecahedronBuilder.ALIAS:
+        return SphereInDodecahedronBuilder.class;
+      case SphereOutOctahedronBuilder.ALIAS:
+        return SphereOutOctahedronBuilder.class;
+      case SphereOutIcosahedronBuilder.ALIAS:
+        return SphereOutIcosahedronBuilder.class;
+      case SphereOutDodecahedronBuilder.ALIAS:
+        return SphereOutDodecahedronBuilder.class;
+      case SphereOutParallelepipedBuilder.ALIAS:
+        return SphereOutParallelepipedBuilder.class;
+      case PointOnSideSurfaceOfCylinderBuilder.ALIAS:
+        return PointOnSideSurfaceOfCylinderBuilder.class;
+      case CentroidBuilder.ALIAS:
+        return CentroidBuilder.class;
+      case OrtoCenterBuilder.ALIAS:
+          return OrtoCenterBuilder.class;
+      case CircleByDiameterAngleBuilder.ALIAS:
+        return CircleByDiameterAngleBuilder.class;
+      case IsoscelesTrapezeBuilder.ALIAS:
+        return IsoscelesTrapezeBuilder.class;
+      case PlaneByPolygonBuilder.ALIAS:
+        return PlaneByPolygonBuilder.class;
+      case PlaneByTriangleBuilder.ALIAS:
+        return PlaneByTriangleBuilder.class;
+      case PlaneParalRayByPointBuilder.ALIAS:
+        return PlaneParalRayByPointBuilder.class;
+      case RibByRibBuilder.ALIAS:
+        return RibByRibBuilder.class;
+      case RayByPointBuilder.ALIAS:
+        return RayByPointBuilder.class;
+      case RibProportionalRibBuilder.ALIAS:
+        return RibProportionalRibBuilder.class;
+      case RibBy2PntsAndLengthBuilder.ALIAS:
+        return RibBy2PntsAndLengthBuilder.class;
+      case CircleByCenterRadiusRibBuilder.ALIAS:
+        return CircleByCenterRadiusRibBuilder.class;
+      case CircleByCenterRadiusRayBuilder.ALIAS:
+        return CircleByCenterRadiusRayBuilder.class;
+      case CircleByCenterRadiusLineBuilder.ALIAS:
+        return CircleByCenterRadiusLineBuilder.class;
+      case IcosahedronSectionBuilder.ALIAS:
+        return IcosahedronSectionBuilder.class;
+      case OctahedronSectionBuilder.ALIAS:
+        return OctahedronSectionBuilder.class;
+      case DodecahedronSectionBuilder.ALIAS:
+        return DodecahedronSectionBuilder.class;
+      case EllipticParaboloidBuilder.ALIAS:
+        return EllipticParaboloidBuilder.class;
+      case EllipticParaboloidByParabolaBuilder.ALIAS:
+        return EllipticParaboloidByParabolaBuilder.class;
+      case HyperboloidOfOneSheetBuilder.ALIAS:
+        return HyperboloidOfOneSheetBuilder.class;
+      case HyperboloidOfTwoSheetBuilder.ALIAS:
+        return HyperboloidOfTwoSheetBuilder.class;
+      case EllipsoidBuilder.ALIAS:
+        return EllipsoidBuilder.class;
+      case EllipsoidSectionBuilder.ALIAS:
+        return EllipsoidSectionBuilder.class;
+      case AngleBetweenTwoLinesBuilder.ALIAS:
+        return AngleBetweenTwoLinesBuilder.class;
+      case AngleBetweenRibLineBuilder.ALIAS:
+        return AngleBetweenRibLineBuilder.class;
+      case AngleBetweenRibsBuilder.ALIAS:
+        return AngleBetweenRibsBuilder.class;
+      case AngleBetweenPlaneLineBuilder.ALIAS:
+        return AngleBetweenPlaneLineBuilder.class;
+      case StellaOctahedronBuilder.ALIAS:
+        return StellaOctahedronBuilder.class;
+      case HexagonalPrismBuilder.ALIAS:
+        return HexagonalPrismBuilder.class;
+      case PairOfLinesBuilder.ALIAS:
+        return PairOfLinesBuilder.class;
+      case ConicByFivePointsBuilder.ALIAS:
+        return ConicByFivePointsBuilder.class;
+      case CuboctahedronBuilder.ALIAS:
+        return CuboctahedronBuilder.class;
+      default:
+        return null;
+    }
+  }
+
+  public static i_BodyBuilder createFromJson(String id, String type, String name, JsonObject param){
+    Class builderClass = builder(type);
+    try {
+      return (i_BodyBuilder)builderClass.getDeclaredConstructor(
+              String.class, String.class, JsonObject.class).newInstance(id, name, param);
+    } catch( Exception ex ){
+      Fatal.warning("unknown body <" + type + ">");
+      return null;
+    }
+  }
+
+  /**
+   * Рефлексивное создание билдера по набору параметров, заданному в явном виде.
+   * @param alias
+   *    builder alias
+   * @param params
+   * @return
+   */
+  public static i_BodyBuilder create(String alias, Object... params) {
+    try {
+      i_BodyBuilder builder = (i_BodyBuilder)builder(alias).getDeclaredConstructor().newInstance();
+      for( int i = 0; i < params.length; i++ ){
+        builder.setValue(builder.keys().get(i), params[i]);
+      }
+      return builder;
+    } catch( Exception ex ){
+      Fatal.warning("Не удалось создать билдер: " + ex.getMessage());
+      return null;
+    }
+  }
+}

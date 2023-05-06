@@ -1,0 +1,10 @@
+{
+  "name": "Карандаш",
+  "carcassFiguresColor": {"R": 0.4,"G": 0.4,"B": 0.4},
+  "facetsFiguresColor": {"R": 0.9,"G": 0.9,"B": 0.9},
+  "fontColor": {"R": 0.1,"G": 0.1,"B": 0.1},
+  "xAxis": {"R": 1,"G": 0,"B": 0},
+  "yAxis": {"R": 0,"G": 1,"B": 0},
+  "zAxis": {"R": 0,"G": 0,"B": 1},
+  "pointsColor": {"R": 0.2,"G": 0.2,"B": 0.2}
+}
