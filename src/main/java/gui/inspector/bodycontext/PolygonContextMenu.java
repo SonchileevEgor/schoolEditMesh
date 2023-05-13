@@ -39,7 +39,7 @@ public class PolygonContextMenu extends BodyContextMenu {
       add(MenuItemFactory.createRenameMI(ctrl, bodyID));
     }
     add(MenuItemFactory.createVisMI(ctrl, bodyID));
-    add(MenuItemFactory.buildRhombicDodMesh(ctrl, bodyID));
+    add(MenuItemFactory.buildRhombicDod(ctrl, bodyID));
     add(MenuItemFactory.createRemoveMI(ctrl, bodyID));
 
     addSeparator();

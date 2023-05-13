@@ -135,7 +135,11 @@ public class RhombicDodecahedron3d implements i_Geom {
   * @param d 4th vertex
   * @throws ExGeom
   */
-  public RhombicDodecahedron3d(Vect3d a, Vect3d b, Vect3d c, Vect3d d) throws ExGeom {
+  public RhombicDodecahedron3d(Vect3d a, Vect3d b, Vect3d c, Vect3d d, String direction) throws ExGeom {
+      System.out.println("направление");
+      System.out.println(direction);
+      System.out.println("направление");
+
       System.out.println("Точки в геоме");
       System.out.println(a);
       System.out.println(b);
@@ -149,33 +153,24 @@ public class RhombicDodecahedron3d implements i_Geom {
     /*отношение большей диагонали к меньшей равен корень из 2 */
     double bigDiagonal = 2 * Vect3d.dist(a, b) * Math.sqrt(2) / Math.sqrt(3); // большая диагональ ромба
     double smallDiagonal = 2 * Vect3d.dist(a, b) / Math.sqrt(3); // маленькая диагональ ромба
-    double heightRomb = 2 * ((bigDiagonal * smallDiagonal) / (4 * Vect3d.dist(a, b))); // высота ромба, 2 * радиус вписанной окр
-//    Polygon3d bottomBase = Polygon3d.regPolygonByTwoPoints(a, b, 4, 10); // ромб будем получать из квадрата
 
-    Polygon3d bottomBase = new Polygon3d(a, b, c, d);
-
-    /*получаем нормаль для того чтобы d и c приблизить к a и b соответственно*/
-    Vect3d tmpNormal = Vect3d.sub(bottomBase.points().get(3), a).getNormalized();
-    // двигаем ближе
-    Vect3d _dtmp = Vect3d.sum(a, tmpNormal.mul(heightRomb));
-    Vect3d _ctmp = Vect3d.sum(b, tmpNormal.mul(heightRomb));
-    /*считаем на сколько надо сдвигать вправо эти точки по т.Пифагора*/
-    double tmp1 = Math.pow(Vect3d.dist(a, b), 2) - Math.pow(heightRomb, 2);
-    double shift = Math.sqrt(tmp1);
-    Vect3d tmpNormalForShift = Vect3d.sub(b, a).getNormalized(); // вектор нормали для сдвига вправо
-    // сдвигаем
-//    _d = Vect3d.sum(_dtmp, tmpNormalForShift.mul(shift));
-//    _c = Vect3d.sum(_ctmp, tmpNormalForShift.mul(shift));
-
-    // подднимаем точнки нижнего основания
-    tmpNormal = (new Polygon3d(_a, _b, _c, _d)).inCircle().normal().getNormalized();
-    _a1 = Vect3d.sum(_a.duplicate(), tmpNormal.mul(-bigDiagonal));
-    _b1 = Vect3d.sum(_b.duplicate(), tmpNormal.mul(-bigDiagonal));
-    _c1 = Vect3d.sum(_c.duplicate(), tmpNormal.mul(-bigDiagonal));
-    _d1 = Vect3d.sum(_d.duplicate(), tmpNormal.mul(-bigDiagonal));
+    // подднимаем (или опускаем) точнки нижнего основания
+    Vect3d tmpNormal = (new Polygon3d(_a, _b, _c, _d)).inCircle().normal().getNormalized();
+    if (direction == "up") {
+        _a1 = Vect3d.sum(_a.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _b1 = Vect3d.sum(_b.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _c1 = Vect3d.sum(_c.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _d1 = Vect3d.sum(_d.duplicate(), tmpNormal.mul(-bigDiagonal));
+    }
+    else if (direction == "down") {
+        _a1 = Vect3d.sub(_a.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _b1 = Vect3d.sub(_b.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _c1 = Vect3d.sub(_c.duplicate(), tmpNormal.mul(-bigDiagonal));
+        _d1 = Vect3d.sub(_d.duplicate(), tmpNormal.mul(-bigDiagonal));
+    }
 
     // будем получать точки боковых ромбов
-    tmpNormalForShift = Vect3d.sub(_b, _d).getNormalized();
+    Vect3d tmpNormalForShift = Vect3d.sub(_b, _d).getNormalized();
     // получим среднюю точку между c и c1
     Vect3d tmpPoint = Vect3d.sum(_c, _c1).mul(0.5);
     // от средней точки между c и c1 шифтуем влево вправо

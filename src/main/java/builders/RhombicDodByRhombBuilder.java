@@ -42,6 +42,7 @@ public class RhombicDodByRhombBuilder extends BodyBuilder {
     setValue(BLDKEY_B, param.get(BLDKEY_B).asString());
     setValue(BLDKEY_C, param.get(BLDKEY_C).asString());
     setValue(BLDKEY_D, param.get(BLDKEY_D).asString());
+    setValue(BLDKEY_NORMAL, param.get(BLDKEY_NORMAL).asString());
   }
 
   public RhombicDodByRhombBuilder(HashMap<String, BuilderParam> params) {
@@ -55,6 +56,7 @@ public class RhombicDodByRhombBuilder extends BodyBuilder {
     addParam(BLDKEY_B, BuilderParam.VERT_2_ALIAS, BuilderParamType.ANCHOR, 100);
     addParam(BLDKEY_C, BuilderParam.VERT_3_ALIAS, BuilderParamType.ANCHOR, 99);
     addParam(BLDKEY_D, BuilderParam.VERT_4_ALIAS, BuilderParamType.ANCHOR, 98);
+    addParam(BLDKEY_NORMAL, BuilderParam.COEF_ALIAS, BuilderParamType.ANCHOR, 97);
   }
 
   @Override
@@ -67,23 +69,17 @@ public class RhombicDodByRhombBuilder extends BodyBuilder {
     i_AnchorContainer anchors = edt.anchors();
     try {
 
-        System.out.println(BLDKEY_A);
-        System.out.println(BLDKEY_B);
-        System.out.println(BLDKEY_C);
-        System.out.println(BLDKEY_D);
       RhombicDodecahedronBody result = new RhombicDodecahedronBody(_id, title(),
               anchors.getVect(getValueAsString(BLDKEY_A)),
               anchors.getVect(getValueAsString(BLDKEY_B)),
               anchors.getVect(getValueAsString(BLDKEY_C)),
-              anchors.getVect(getValueAsString(BLDKEY_D)));
+              anchors.getVect(getValueAsString(BLDKEY_D)),
+              getValueAsString(BLDKEY_NORMAL));
 
       result.addAnchor("A", anchors.get(getValueAsString(BLDKEY_A)).id());
       result.addAnchor("B", anchors.get(getValueAsString(BLDKEY_B)).id());
       result.addAnchor("C", anchors.get(getValueAsString(BLDKEY_C)).id());
       result.addAnchor("D", anchors.get(getValueAsString(BLDKEY_D)).id());
-
-//      edt.addAnchor(result.C(), result, "C");
-//      edt.addAnchor(result.D(), result, "D");
 
       edt.addAnchor(result.A1(), result, "A1");
       edt.addAnchor(result.B1(), result, "B1");

@@ -10,6 +10,7 @@ import static builders.BodyBuilder.BLDKEY_A;
 import static builders.BodyBuilder.BLDKEY_B;
 import static builders.BodyBuilder.BLDKEY_C;
 import static builders.BodyBuilder.BLDKEY_D;
+import static builders.BodyBuilder.BLDKEY_NORMAL;
 import builders.RhombicDodecahedronBuilder;
 
 import builders.DivideRibInRelationBuilder;
@@ -37,6 +38,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import net.miginfocom.layout.CC;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
@@ -70,7 +72,7 @@ public class MenuItemFactory {
     JMenuItem mi;
     if (bd.exists()) {
       final boolean isVisible = ctrl.isBodyVisible(bodyID);
-      mi = new JMenuItem(isVisible ? "Скрыть123" : "Показать123",
+      mi = new JMenuItem(isVisible ? "Скрыть" : "Показать",
               isVisible ? IconList.ACTION_HIDE.getMediumIcon() : IconList.ACTION_SHOW.getMediumIcon());
       mi.addActionListener(new AbstractAction() {
         @Override
@@ -100,11 +102,24 @@ public class MenuItemFactory {
       mi.addActionListener(new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent ae) {
+          int dialogButton = JOptionPane.YES_NO_OPTION;
+          String[] options = new String[2];
+          options[0] = "Вверх";
+          options[1] = "Вниз";
+          String direction = "";
+          int dialogResult = JOptionPane.showOptionDialog(null, "В какую сторону относительно выбраной грани построить ромбододекаэдр?", "Сообщение", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+          if(dialogResult == 0) {
+            direction = "up";
+          } else {
+            direction = "down";
+          }
+          
+          
           try {
             i_Body bd = ctrl.getBody(bodyID);
             System.out.println(bd.getGeom().type());
             
-            System.out.println(bd.getAnchors());
+            System.out.println(bd.getAllFaces(ctrl.getEditor()).get(0).toString());
 
             System.out.println(bd.getAnchors().get("0"));
             System.out.println(bd.getAnchors().get("1"));
@@ -117,6 +132,7 @@ public class MenuItemFactory {
                 builder.setValue(BLDKEY_B, bd.getAnchors().get("1"));
                 builder.setValue(BLDKEY_C, bd.getAnchors().get("2"));
                 builder.setValue(BLDKEY_D, bd.getAnchors().get("3"));
+                builder.setValue(BLDKEY_NORMAL, direction);
                 ctrl.add(builder, null, false);
                 
                 builder.create(ctrl.getEditor(), null);
@@ -142,7 +158,7 @@ public class MenuItemFactory {
     mi.addActionListener(new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-            i_Body bd = null;
+          i_Body bd = null;
           try {
               bd = ctrl.getBody(bodyID);
           } catch (ExNoBody ex) {
@@ -163,60 +179,15 @@ public class MenuItemFactory {
             
             ArrayList<String> pnts = new ArrayList<String>(pointsAnchors.keySet());
             
-//            System.out.println(bd.getAllFaces(ctrl.getEditor()));
-            
-//            i_AnchorContainer anchors = ctrl.getEditor().anchors();
-
-//            System.out.println(bd.getAllFaces(ctrl.getEditor()).get(0).points().get(0));
-//                try {
-//                    System.out.println(anchors.getVect(bd.getAnchors().get(pnts.get(0))));
-//                } catch (ExNoAnchor ex) {
-//                    Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            System.out.println(bd.getAnchors().get(pnts.get(0)));
-
-//System.out.println(bd.getAnchors());
-//System.out.println(pnts.get(0));
-//System.out.println(pointsAnchors.get(pnts.get(0)));
-//System.out.println(pointsAnchors.get("A"));
-//System.out.println(pointsAnchors.get("C"));
-//System.out.println(pointsAnchors.get("D"));
-            
             for (int i=0; i < bd.getAllFaces(ctrl.getEditor()).size(); i++) {
-                RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("ТЕСТ123");
-//                
+                RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("Ромбододекаэдр " + i + 1);
                 i_AnchorContainer anchors = ctrl.getEditor().anchors();
-//                System.out.println("anchors");
-//                System.out.println(anchors);
-//                System.out.println("anchors");
-//                System.out.println("bd.getAnchors()");
-//                System.out.println(bd.getAnchors());
-//                System.out.println("bd.getAnchors()");
-//                System.out.println("pnts");
-//                System.out.println(pnts);
-//                System.out.println("pnts");
-
-
 
                 for (int j=0; j<pnts.size(); j++) {
-//                    System.out.println(bd.getAllFaces(ctrl.getEditor()).get(i).points().get(2));
-//                    try {
-//                        System.out.println(anchors.getVect(bd.getAnchors().get(pnts.get(j))));
-//                    } catch (ExNoAnchor ex) {
-//                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                    
-//                    try {
-//                        System.out.println(anchors.getVect(bd.getAnchors().get(pnts.get(j))) == bd.getAllFaces(ctrl.getEditor()).get(i).points().get(2));
-//                    } catch (ExNoAnchor ex) {
-//                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-                    
-                    
-                    
                     try {
                         if (bd.getAllFaces(ctrl.getEditor()).get(i).points().get(0).equals(anchors.getVect(bd.getAnchors().get(pnts.get(j))))) {                        
-                            builder.setValue(BLDKEY_A, pointsAnchors.get(pnts.get(j)));                        }
+                            builder.setValue(BLDKEY_A, pointsAnchors.get(pnts.get(j)));                        
+                        }
                     } catch (ExNoAnchor ex) {
                         Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -244,14 +215,17 @@ public class MenuItemFactory {
                     } catch (ExNoAnchor ex) {
                         Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
                     }
+
+
+                };
+                builder.setValue(BLDKEY_NORMAL, (i%2==1) ? "up" : "down");
+                if (i == 2) {
+                    builder.setValue(BLDKEY_NORMAL, "up");
                 }
-                ;
-                        
-//                builder.setValue(BLDKEY_B, bd.getAllFaces(ctrl.getEditor()).get(i).points().get(1));
-//                builder.setValue(BLDKEY_C, bd.getAllFaces(ctrl.getEditor()).get(i).points().get(2));
-//                builder.setValue(BLDKEY_D, bd.getAllFaces(ctrl.getEditor()).get(i).points().get(3));
+                if (i == 3) {
+                    builder.setValue(BLDKEY_NORMAL, "down");
+                }
                 ctrl.add(builder, null, false);
-//                
                 builder.create(ctrl.getEditor(), null);
             }
       }

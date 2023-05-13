@@ -82,11 +82,12 @@ public class RhombicDodecahedronBody extends BodyAdapter {
    * @param b
    * @param c
    * @param d
+   * @param direction
    * @throws geom.ExGeom
    */
-  public RhombicDodecahedronBody(String id, String title, Vect3d a, Vect3d b, Vect3d c, Vect3d d) throws ExGeom {
+  public RhombicDodecahedronBody(String id, String title, Vect3d a, Vect3d b, Vect3d c, Vect3d d, String direction) throws ExGeom {
     super(id, title);
-    _dod = new RhombicDodecahedron3d(a, b, c, d);
+    _dod = new RhombicDodecahedron3d(a, b, c, d, direction);
     _alias = "ромбододекаэдр";
     _exists = true;
   }
