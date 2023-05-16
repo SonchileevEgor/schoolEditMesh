@@ -2,6 +2,9 @@ package gui.inspector;
 
 import opengl.colorgl.ColorGL;
 import bodies.BodyType;
+import static builders.BodyBuilder.BLDKEY_A;
+import static builders.BodyBuilder.BLDKEY_B;
+import builders.MinkowskiSumBuilder;
 import editor.ExNoAnchor;
 import editor.ExNoBody;
 import editor.state.AnchorState;
@@ -15,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -38,6 +43,9 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
 
   private final JButton _showTitleButton;
   private final JButton _removeButton;
+  
+  //Кнопка для суммы Минковского
+  private final JButton _minkowskiButton;
 
   /**
    * Color of focused points chooser.
@@ -67,6 +75,9 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
     _fillButton = new JToggleButton(IconList.FILL.getSmallIcon());
     _showTitleButton = new JButton(IconList.SHOW_LABEL.getSmallIcon());
     _removeButton = new JButton(IconList.WASTE.getSmallIcon());
+    
+    _minkowskiButton = new JButton(IconList.BODY_INTERSECT.getSmallIcon());
+    
     _pointColorChooser = new EdtColorChooser(
               _ctrl, CurrentTheme.getColorTheme().getPointsColorGL(), EdtColorChooser.SOLID);
     _carcassColorChooser = new EdtColorChooser(
@@ -78,6 +89,9 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
     _showBodyButton.setToolTipText("Показать");
     _showTitleButton.setToolTipText("Показать обозначение");
     _removeButton.setToolTipText("Удалить");
+    
+    _minkowskiButton.setToolTipText("Сумма Минковского");
+    
     _pointColorChooser.setToolTipText("Цвет точки");
     _carcassColorChooser.setToolTipText("Цвет каркаса");
     _surfaceColorChooser.setToolTipText("Цвет поверхности");
@@ -217,6 +231,25 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
           _ctrl.setUndo("Изменение цвета точек");
         }
       });
+    
+    _minkowskiButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        System.out.println(_ctrl.getFocusCtrl().getFocusedBodies());
+        //Вот так можно получить объект со всеми точками, ребрами и гранями. или нет?
+        //_ctrl.getBody(_ctrl.getFocusCtrl().getFocusedBodies().get(0))
+        //Вот так можно получить объект со всеми точками, ребрами и гранями. или нет?
+        System.out.println(_ctrl.getFocusCtrl().getFocusedBodies().get(0));
+        System.out.println(_ctrl.getFocusCtrl().getFocusedBodies().get(1));
+
+        
+        MinkowskiSumBuilder builder = new MinkowskiSumBuilder("ТЕСТ123");
+        builder.setValue(BLDKEY_A, _ctrl.getFocusCtrl().getFocusedBodies().get(0));
+        builder.setValue(BLDKEY_B, _ctrl.getFocusCtrl().getFocusedBodies().get(1));
+      
+        ctrl.add(builder, null, false);
+      }
+    });
 
     CC buttonConstraints = new CC().width("20!").height("20!");
     CC colorChooserConstraints = new CC().width("18!").height("18!");
@@ -231,6 +264,7 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
     add(_carcassColorChooser, colorChooserConstraints);
     add(_pointColorChooser, colorChooserConstraints);
     add(_showBodyButton, buttonConstraints);
+    add(_minkowskiButton, buttonConstraints);
 
     update();
   }
@@ -255,6 +289,9 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
     _showBodyButton.setIcon(_isShowBodyButtonPressed ? IconList.SHOWN.getSmallIcon() : IconList.HIDDEN.getSmallIcon());
     _fillButton.setVisible(areBodiesWithSurface && areBodiesWithCarcass && !hasNonExistBody);
     _removeButton.setVisible(_ctrl.getFocusCtrl().containsRemovableBody());
+    
+    _minkowskiButton.setVisible(areBodiesWithPoints && _ctrl.getFocusCtrl().getFocusedBodies().size() == 2);
+    
     _surfaceColorChooser.setVisible(areBodiesWithSurface && !hasNonExistBody);
     _carcassColorChooser.setVisible(areBodiesWithCarcass && !hasNonExistBody);
     _pointColorChooser.setVisible(arePoints && !hasNonExistBody);

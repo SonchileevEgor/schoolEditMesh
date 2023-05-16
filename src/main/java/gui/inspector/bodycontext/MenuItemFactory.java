@@ -104,8 +104,8 @@ public class MenuItemFactory {
         public void actionPerformed(ActionEvent ae) {
           int dialogButton = JOptionPane.YES_NO_OPTION;
           String[] options = new String[2];
-          options[0] = "Вверх";
-          options[1] = "Вниз";
+          options[0] = "Наружу";
+          options[1] = "Внутрь";
           String direction = "";
           int dialogResult = JOptionPane.showOptionDialog(null, "В какую сторону относительно выбраной грани построить ромбододекаэдр?", "Сообщение", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
           if(dialogResult == 0) {
@@ -117,7 +117,9 @@ public class MenuItemFactory {
           
           try {
             i_Body bd = ctrl.getBody(bodyID);
-            System.out.println(bd.getGeom().type());
+            System.out.println("AAAAAAAAAAAAAAAAAAA");
+            System.out.println(bd.getAllVertices());
+            System.out.println("AAAAAAAAAAAAAAAAAAA");
             
             System.out.println(bd.getAllFaces(ctrl.getEditor()).get(0).toString());
 
