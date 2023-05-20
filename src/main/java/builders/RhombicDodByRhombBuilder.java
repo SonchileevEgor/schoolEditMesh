@@ -20,6 +20,11 @@ import minjson.JsonObject;
  */
 public class RhombicDodByRhombBuilder extends BodyBuilder {
   static public final String ALIAS = "RhombicDodecahedron";
+  private RhombicDodecahedronBody _result = null;
+
+  public RhombicDodecahedronBody getResult() {
+      return _result;
+  }
   
   public RhombicDodByRhombBuilder() {
   }
@@ -96,6 +101,7 @@ public class RhombicDodByRhombBuilder extends BodyBuilder {
       result.addRibs(edt);
       result.addPlanes(edt);
       _exists = true;
+      _result = result;
       return result;
     } catch (ExGeom | ExBadRef ex) {
       if (_exists) {

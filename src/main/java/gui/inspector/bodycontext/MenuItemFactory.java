@@ -8,12 +8,14 @@ import static builders.BodyBuilder.BLDKEY_RIB;
 
 import static builders.BodyBuilder.BLDKEY_A;
 import static builders.BodyBuilder.BLDKEY_B;
+import static builders.BodyBuilder.BLDKEY_BODY;
 import static builders.BodyBuilder.BLDKEY_C;
 import static builders.BodyBuilder.BLDKEY_D;
 import static builders.BodyBuilder.BLDKEY_NORMAL;
 import builders.RhombicDodecahedronBuilder;
 
 import builders.DivideRibInRelationBuilder;
+import builders.MeshBuilder;
 import builders.RhombicDodByRhombBuilder;
 import editor.ExNoAnchor;
 import editor.ExNoBody;
@@ -146,71 +148,11 @@ public class MenuItemFactory {
           } catch (ExNoBody ex) {
               Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
           }
-            System.out.println(bd.getGeom().type());
-            
-            HashMap<String, String> pointsAnchors = new HashMap<String, String>();
-
-            for(Map.Entry<String, String> entry : bd.getAnchors().entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-
-                if (!key.contains("plane") && !key.contains("rib")) {
-                    pointsAnchors.put(key, value);
-                }
-            }
-            
-            ArrayList<String> pnts = new ArrayList<String>(pointsAnchors.keySet());
-            
-            for (int i=0; i < bd.getAllFaces(ctrl.getEditor()).size(); i++) {
-                RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("Ромбододекаэдр " + i + 1);
-                i_AnchorContainer anchors = ctrl.getEditor().anchors();
-
-                for (int j=0; j<pnts.size(); j++) {
-                    try {
-                        if (bd.getAllFaces(ctrl.getEditor()).get(i).points().get(0).equals(anchors.getVect(bd.getAnchors().get(pnts.get(j))))) {                        
-                            builder.setValue(BLDKEY_A, pointsAnchors.get(pnts.get(j)));                        
-                        }
-                    } catch (ExNoAnchor ex) {
-                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    try {
-                        if (bd.getAllFaces(ctrl.getEditor()).get(i).points().get(1).equals(anchors.getVect(bd.getAnchors().get(pnts.get(j))))) {                        
-                            builder.setValue(BLDKEY_B, pointsAnchors.get(pnts.get(j)));
-                        }
-                    } catch (ExNoAnchor ex) {
-                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    try {
-                        if (bd.getAllFaces(ctrl.getEditor()).get(i).points().get(2).equals(anchors.getVect(bd.getAnchors().get(pnts.get(j))))) {                        
-                            builder.setValue(BLDKEY_C, pointsAnchors.get(pnts.get(j)));
-                        }
-                    } catch (ExNoAnchor ex) {
-                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    try {
-                        if (bd.getAllFaces(ctrl.getEditor()).get(i).points().get(3).equals(anchors.getVect(bd.getAnchors().get(pnts.get(j))))) {                        
-                            builder.setValue(BLDKEY_D, pointsAnchors.get(pnts.get(j)));
-                        }
-                    } catch (ExNoAnchor ex) {
-                        Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-
-                };
-                builder.setValue(BLDKEY_NORMAL, (i%2==1) ? "up" : "down");
-                if (i == 2) {
-                    builder.setValue(BLDKEY_NORMAL, "up");
-                }
-                if (i == 3) {
-                    builder.setValue(BLDKEY_NORMAL, "down");
-                }
-                ctrl.add(builder, null, false);
-            }
-      }
-    });
+          MeshBuilder mb = new MeshBuilder("Сетка ромбододекаэдров");
+          mb.setValue(BLDKEY_BODY, bodyID);
+          ctrl.add(mb, null, false);
+    }
+  });
     return mi;
   }
 
