@@ -275,59 +275,59 @@ public class RhombicDodecahedron3d implements i_Geom {
   }
 
   public Vect3d A() {
-    return _a.duplicate();
+    return _a;
   }
 
   public Vect3d B() {
-    return _b.duplicate();
+    return _b;
   }
 
   public Vect3d C() {
-    return _c.duplicate();
+    return _c;
   }
 
   public Vect3d D() {
-    return _d.duplicate();
+    return _d;
   }
 
   public Vect3d A1() {
-    return _a1.duplicate();
+    return _a1;
   }
 
   public Vect3d B1() {
-    return _b1.duplicate();
+    return _b1;
   }
 
   public Vect3d C1() {
-    return _c1.duplicate();
+    return _c1;
   }
 
   public Vect3d D1() {
-    return _d1.duplicate();
+    return _d1;
   }
 
   public Vect3d E() {
-    return _e.duplicate();
+    return _e;
   }
 
   public Vect3d F() {
-    return _f.duplicate();
+    return _f;
   }
 
   public Vect3d G() {
-    return _g.duplicate();
+    return _g;
   }
 
   public Vect3d H() {
-    return _h.duplicate();
+    return _h;
   }
 
   public Vect3d I() {
-    return _i.duplicate();
+    return _i;
   }
 
   public Vect3d J() {
-    return _j.duplicate();
+    return _j;
   }
   
   public double surfaceArea() {

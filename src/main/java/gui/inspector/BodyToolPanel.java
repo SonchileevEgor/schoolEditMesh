@@ -290,7 +290,7 @@ public class BodyToolPanel extends JPanel implements i_BodyStateChangeListener {
     _fillButton.setVisible(areBodiesWithSurface && areBodiesWithCarcass && !hasNonExistBody);
     _removeButton.setVisible(_ctrl.getFocusCtrl().containsRemovableBody());
     
-    _minkowskiButton.setVisible(areBodiesWithPoints && _ctrl.getFocusCtrl().getFocusedBodies().size() == 2);
+    _minkowskiButton.setVisible(_ctrl.getFocusCtrl().getFocusedBodies().size() == 2);
     
     _surfaceColorChooser.setVisible(areBodiesWithSurface && !hasNonExistBody);
     _carcassColorChooser.setVisible(areBodiesWithCarcass && !hasNonExistBody);

@@ -117,40 +117,20 @@ public class MenuItemFactory {
           
           try {
             i_Body bd = ctrl.getBody(bodyID);
-            System.out.println("AAAAAAAAAAAAAAAAAAA");
-            System.out.println(bd.getAllVertices());
-            System.out.println("AAAAAAAAAAAAAAAAAAA");
-            
-            System.out.println(bd.getAllFaces(ctrl.getEditor()).get(0).toString());
 
-            System.out.println(bd.getAnchors().get("0"));
-            System.out.println(bd.getAnchors().get("1"));
-            System.out.println(bd.getAnchors().get("2"));
-            System.out.println(bd.getAnchors().get("3"));
-
-//            ctrl.getEditor().addAnchor(bd.getAnchors(), bd, DEFAULT);
-                RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("ТЕСТ123");
-                builder.setValue(BLDKEY_A, bd.getAnchors().get("0"));
-                builder.setValue(BLDKEY_B, bd.getAnchors().get("1"));
-                builder.setValue(BLDKEY_C, bd.getAnchors().get("2"));
-                builder.setValue(BLDKEY_D, bd.getAnchors().get("3"));
-                builder.setValue(BLDKEY_NORMAL, direction);
-                ctrl.add(builder, null, false);
+            RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("ТЕСТ123");
+            builder.setValue(BLDKEY_A, bd.getAnchors().get("0"));
+            builder.setValue(BLDKEY_B, bd.getAnchors().get("1"));
+            builder.setValue(BLDKEY_C, bd.getAnchors().get("2"));
+            builder.setValue(BLDKEY_D, bd.getAnchors().get("3"));
+            builder.setValue(BLDKEY_NORMAL, direction);
+            ctrl.add(builder, null, false);
                 
-                builder.create(ctrl.getEditor(), null);
-            
-            
-//            ctrl.setBodyVisible(bodyID, !isVisible,
-//                    !isVisible || bd.type() == BodyType.POINT, true, true, true);
-//            ctrl.notifyBodyStateChange(bodyID);
-//            ctrl.setUndo(isVisible ? "показать тело" : "скрыть тело");
-//            ctrl.redraw();
           } catch (ExNoBody ex) { }
         }
       });
     } else {
       mi = new JMenuItem("Прилепить ромбододекаэдр", IconList.RHOMBIC_DODECAHEDRON.getMediumIcon());
-//      mi.setEnabled(false);
     }
     return mi;
   }
@@ -228,7 +208,6 @@ public class MenuItemFactory {
                     builder.setValue(BLDKEY_NORMAL, "down");
                 }
                 ctrl.add(builder, null, false);
-                builder.create(ctrl.getEditor(), null);
             }
       }
     });
