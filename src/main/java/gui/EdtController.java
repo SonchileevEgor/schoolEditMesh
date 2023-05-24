@@ -466,6 +466,11 @@ public class EdtController {
 
     // Список изменённых якорей
     // Их нужно оповестить об изменении
+    
+    System.out.println("А якоря у тела есть?");
+    System.out.println(body.getAnchors());
+    System.out.println("А якоря у тела есть?");
+    
     ArrayList<String> changedAnchors = new ArrayList<>();
 
     if (visible) {

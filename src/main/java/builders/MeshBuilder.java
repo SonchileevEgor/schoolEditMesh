@@ -93,6 +93,8 @@ public class MeshBuilder extends BodyBuilder {
     ArrayList<String> pnts = new ArrayList<String>(pointsAnchors.keySet());
     
     ArrayList<RhombicDodecahedronBody> rds = new ArrayList<RhombicDodecahedronBody>();
+    
+    HashMap<String, String> meshAnchors = new HashMap<String, String>();
 
     for (int i=0; i < bd.getAllFaces(edt).size(); i++) {
         RhombicDodByRhombBuilder builder = new RhombicDodByRhombBuilder("Ромбододекаэдр " + i + 1);
@@ -142,14 +144,22 @@ public class MeshBuilder extends BodyBuilder {
         }
         edt.add(builder, null, false);
         rds.add(builder.getResult());
+        for ( Map.Entry<String, String> entry : builder.getResult().getAnchors().entrySet()) {
+            meshAnchors.put(Integer.toString(i) + entry.getKey(), entry.getValue());
+        }
     }
     Mesh3d m3d = new Mesh3d(rds);
     MeshBody result = null;
-      try {
-          result = new MeshBody(_id, title(), m3d);
-      } catch (ExGeom ex) {
-          Logger.getLogger(MeshBuilder.class.getName()).log(Level.SEVERE, null, ex);
-      }
+    try {
+        result = new MeshBody(_id, title(), m3d);
+    } catch (ExGeom ex) {
+        Logger.getLogger(MeshBuilder.class.getName()).log(Level.SEVERE, null, ex);
+    }
+      
+    for ( Map.Entry<String, String> entry : meshAnchors.entrySet()) {
+        result.addAnchor(entry.getKey(), entry.getValue());
+    }
+    
     return result;
   }
 

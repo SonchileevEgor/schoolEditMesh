@@ -12,12 +12,16 @@ import java.util.Collections;
 public class Mesh3d implements i_Geom, i_OrientableGeom {
   private ArrayList<RhombicDodecahedronBody> bds;
 
+  public ArrayList<RhombicDodecahedronBody> getBds() {
+    return bds;
+  }
+
   public Mesh3d(ArrayList<RhombicDodecahedronBody> bds) {
       this.bds = bds;
   }
 
   /**
-   * @return all vertices of cube
+   * @return all vertices of mesh
    */
   public ArrayList<Vect3d> points(){
     ArrayList<Vect3d> points = new ArrayList<Vect3d>();
@@ -28,9 +32,23 @@ public class Mesh3d implements i_Geom, i_OrientableGeom {
     }
     return points;
   }
+  
+  /**
+   * @return all ribs of mesh
+   * @throws ExDegeneration
+   */
+  public ArrayList<Rib3d> ribs() throws ExDegeneration {
+    ArrayList<Rib3d> ribs = new ArrayList<Rib3d>();
+    for (int i =0; i< bds.size(); i++) {
+        for (int j=0; j< bds.get(i).getAllEdges(null).size(); j++) {
+            ribs.add(bds.get(i).getAllEdges(null).get(j));
+        }
+    }
+    return ribs;
+  }
 
   /**
-   * @return all faces of cube
+   * @return all faces of mesh
    * @throws ExGeom
    */
   public ArrayList<Polygon3d> faces() throws ExGeom {
@@ -69,18 +87,18 @@ public class Mesh3d implements i_Geom, i_OrientableGeom {
 
   @Override
   public i_Geom constr(ArrayList<Vect3d> points) {
-    Mesh3d cube = null;
-    try {
-      cube = new Mesh3d(points);
-    } catch (ExDegeneration ex) {
-      GeomErrorHandler.errorMessage(ex);
-    }
-    return cube;
+    Mesh3d mesh = null;
+//    try {
+//      cube = new Mesh3d(points);
+//    } catch (ExDegeneration ex) {
+//      GeomErrorHandler.errorMessage(ex);
+//    }
+    return mesh;
   }
 
   @Override
   public Vect3d getUpVect() {
-    return null;
+    return Vect3d.UZ;
   }
 
   @Override

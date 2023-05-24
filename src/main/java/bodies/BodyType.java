@@ -111,7 +111,9 @@ public enum BodyType {
   CONIC(new DisplayParamSet(CHOSEN, VISIBLE, CARCASS_COLOR, CARCASS_THICKNESS),
           "conic", 93, false, true, false, false, false, false, false, false, false, false),
   CUBOCTAHEDRON(new DisplayParamSet(CHOSEN),
-          "oct", 50, true, true, false, true, true, true, false, false, false, false);
+          "oct", 50, true, true, false, true, true, true, false, false, false, false),          
+  MESH3D(new DisplayParamSet(CHOSEN, VISIBLE, CARCASS_COLOR, CARCASS_THICKNESS),
+          "mesh", 50, true, true, false, false, false, true, true, true, false, false);
   
   public static ArrayList<BodyType> getBodiesWithCircumscribedSphere() {
     ArrayList<BodyType> result = new ArrayList<>();

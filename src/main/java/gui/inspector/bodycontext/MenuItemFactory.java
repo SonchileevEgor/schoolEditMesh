@@ -2,6 +2,8 @@
 package gui.inspector.bodycontext;
 
 import bodies.BodyType;
+import bodies.MeshBody;
+import bodies.RhombicDodecahedronBody;
 import static builders.BodyBuilder.BLDKEY_ALPHA;
 import static builders.BodyBuilder.BLDKEY_BETA;
 import static builders.BodyBuilder.BLDKEY_RIB;
@@ -22,6 +24,7 @@ import editor.ExNoBody;
 import editor.InvalidBodyNameException;
 import editor.i_AnchorContainer;
 import editor.i_Body;
+import geom.Mesh3d;
 import geom.Polygon3d;
 import geom.Vect3d;
 import geom.i_OrientableGeom;
@@ -59,6 +62,22 @@ public class MenuItemFactory {
       mi.addActionListener(new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent ae) {
+          if (bd.type() == BodyType.MESH3D) {
+            System.out.println("bd.type() == BodyType.MESH3D");
+            MeshBody meshBody = (MeshBody) bd;
+            System.out.println("MeshBody meshBody = (MeshBody) bd;");
+            Mesh3d mesh3d = meshBody.mesh();
+            System.out.println("Mesh3d mesh3d = meshBody.mesh();");
+            ArrayList<RhombicDodecahedronBody> rds = mesh3d.getBds();
+            System.out.println("ArrayList<RhombicDodecahedronBody> rds = mesh3d.getBds();");
+            for (int i = 0; i < rds.size(); i++) {
+              System.out.println("rds.get(i).id()");
+              System.out.println(rds.get(i).id());
+              System.out.println("rds.get(i).id()");
+
+//              ctrl.removeBody(rds.get(i).id());
+            }
+          }
           ctrl.removeBody(bodyID);
           ctrl.redraw();
         }
@@ -81,8 +100,37 @@ public class MenuItemFactory {
         public void actionPerformed(ActionEvent ae) {
           try {
             i_Body bd = ctrl.getBody(bodyID);
+
             ctrl.setBodyVisible(bodyID, !isVisible,
                     !isVisible || bd.type() == BodyType.POINT, true, true, true);
+            ctrl.notifyBodyStateChange(bodyID);
+            ctrl.setUndo(isVisible ? "показать тело" : "скрыть тело");
+            ctrl.redraw();
+          } catch (ExNoBody ex) { }
+        }
+      });
+    } else {
+      mi = new JMenuItem("Показать", IconList.ACTION_SHOW.getMediumIcon());
+      mi.setEnabled(false);
+    }
+    return mi;
+  }
+  
+  public static JMenuItem createVisMIPnts(final EdtController ctrl, final String bodyID) throws ExNoBody {
+    i_Body bd = ctrl.getBody(bodyID);
+    JMenuItem mi;
+    if (bd.exists()) {
+      final boolean isVisible = ctrl.isBodyVisible(bodyID);
+      mi = new JMenuItem(isVisible ? "Скрыть вершины" : "Показать вершины",
+              isVisible ? IconList.ACTION_HIDE.getMediumIcon() : IconList.ACTION_SHOW.getMediumIcon());
+      mi.addActionListener(new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+          try {
+            i_Body bd = ctrl.getBody(bodyID);
+
+            ctrl.setBodyVisible(bodyID, !isVisible,
+                    true, false, false, false);
             ctrl.notifyBodyStateChange(bodyID);
             ctrl.setUndo(isVisible ? "показать тело" : "скрыть тело");
             ctrl.redraw();

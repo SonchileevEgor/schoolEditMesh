@@ -7,6 +7,9 @@ import editor.i_Body;
 import geom.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.Fatal;
 import util.Util;
 
@@ -34,7 +37,7 @@ public class MeshBody extends BodyAdapter {
 
   @Override
   public BodyType type() {
-    return BodyType.CUBE;
+    return BodyType.MESH3D;
   }
 
   @Override
@@ -45,6 +48,11 @@ public class MeshBody extends BodyAdapter {
   @Override
   public void glDrawFacets(Render ren){
     // рисуются только якоря
+  }
+  
+  @Override
+  public HashMap<String, String> getAnchors() {
+    return _anchors;
   }
 
   @Override
@@ -72,18 +80,18 @@ public class MeshBody extends BodyAdapter {
     } catch (ExGeom ex) { }
     return null;
   }
+  
+  @Override
+  public ArrayList<Vect3d> getAllVertices() {
+    return _mesh.points();
+  }
 
   @Override
   public void addAnchorsToBody(i_Body result, Editor edt) {
-//    MeshBody cube = (MeshBody) result;
-//    edt.addAnchor(cube.A1(), result, "A1");
-//    edt.addAnchor(cube.B1(), result, "B1");
-//    edt.addAnchor(cube.C1(), result, "C1");
-//    edt.addAnchor(cube.D1(), result, "D1");
-//    edt.addAnchor(cube.A2(), result, "A2");
-//    edt.addAnchor(cube.B2(), result, "B2");
-//    edt.addAnchor(cube.C2(), result, "C2");
-//    edt.addAnchor(cube.D2(), result, "D2");
+    MeshBody mesh = (MeshBody) result;
+    for (int i=0; i< this.getAllVertices().size(); i++) {
+        edt.addAnchor(this.getAllVertices().get(i), result, Integer.toString(i));
+    }
   }
 
   @Override

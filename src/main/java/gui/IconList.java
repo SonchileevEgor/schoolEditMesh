@@ -252,7 +252,8 @@ public enum IconList {
   OPEN_3D("3d_enter.png"),
   SPLASH("splash.jpg"),
   LOAD_ANIMATED("load.gif"),
-  CUBOCTAHEDRON
+  CUBOCTAHEDRON,
+  MESH3D("regular polyhedron/pic (33).png")
   ;
 
   public static IconList getByBodyType(BodyType type) {
