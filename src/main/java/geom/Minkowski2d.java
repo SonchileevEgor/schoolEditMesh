@@ -14,6 +14,11 @@ import java.util.Stack;
  */
 public class Minkowski2d implements i_Geom, i_OrientableGeom {
   private ArrayList<Vect3d> _points;
+  private ArrayList<Rib3d> _vectors;
+
+    public ArrayList<Rib3d> getVectors() {
+        return _vectors;
+    }
 
   /**
    * Constructor of cube by 3 points:
@@ -22,56 +27,124 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
      * @param b1
    * @throws ExDegeneration
    */
-  public Minkowski2d(i_Body a1, i_Body b1) throws ExDegeneration {
-        ArrayList<Vect3d> points = new ArrayList<Vect3d>();
-        System.out.println("BBBBBBBBBBBBBBBBBB");
+//  public Minkowski2d(i_Body a1, i_Body b1) throws ExDegeneration {
+//        ArrayList<Vect3d> points = new ArrayList<Vect3d>();
+//        System.out.println("BBBBBBBBBBBBBBBBBB");
+//        Polygon3d a = (Polygon3d) a1.getGeom();
+//        Polygon3d b = (Polygon3d) b1.getGeom();
+//        System.out.println(a.getAsAbstractPolygon());
+//        System.out.println(b.getAsAbstractPolygon());
+//        System.out.println("BBBBBBBBBBBBBBBBBB");
+//        for (Vect3d v1 : a.getAsAbstractPolygon()) {
+//            for (Vect3d v2 : b.getAsAbstractPolygon()) {
+//                points.add(new Vect3d(v1.x() + v2.x(), v1.y() + v2.y(), 0));
+//            }
+//        }
+//        Vect3d center = new Vect3d();
+//        for (Vect3d v : points) {
+//            center.set_x(center.x() + v.x());
+//            center.set_y(center.y() + v.y());
+//        }
+//        center.set_x(center.x() / points.size());
+//        center.set_y(center.y() / points.size());
+//
+//        Collections.sort(points, new Comparator<Vect3d>() {
+//            @Override
+//            public int compare(Vect3d p1, Vect3d p2) {
+//                double angle1 = Math.atan2(p1.y() - center.y(), p1.x() - center.x());
+//                double angle2 = Math.atan2(p2.y() - center.y(), p2.x() - center.x());
+//                if (angle1 < angle2) {
+//                    return -1;
+//                } else if (angle1 > angle2) {
+//                    return 1;
+//                } else {
+//                    return 0;
+//                }
+//            }
+//        });
+//        List<Vect3d> uniqueVertices = new ArrayList<>();
+//        uniqueVertices.add(points.get(0));
+//        for (int i = 1; i < points.size(); i++) {
+//            Vect3d prev = uniqueVertices.get(uniqueVertices.size() - 1);
+//            Vect3d curr = points.get(i);
+//            if (prev.x() != curr.x() || prev.y() != curr.y()) {
+//                uniqueVertices.add(curr);
+//            }
+//        }
+//        System.out.println("Было точек до выпуклой оболочки");
+//        System.out.println(uniqueVertices.size());
+//        _points = (ArrayList<Vect3d>) convexHull(uniqueVertices);
+//        System.out.println("Стало после выпуклой оболочки");
+//        System.out.println(_points.size());
+//  }
+  
+    public Minkowski2d(i_Body a1, i_Body b1) throws ExDegeneration {
         Polygon3d a = (Polygon3d) a1.getGeom();
         Polygon3d b = (Polygon3d) b1.getGeom();
-        System.out.println(a.getAsAbstractPolygon());
-        System.out.println(b.getAsAbstractPolygon());
-        System.out.println("BBBBBBBBBBBBBBBBBB");
-        for (Vect3d v1 : a.getAsAbstractPolygon()) {
-            for (Vect3d v2 : b.getAsAbstractPolygon()) {
-                points.add(new Vect3d(v1.x() + v2.x(), v1.y() + v2.y(), 0));
-            }
+        
+        
+        ArrayList<Vect3d> K = a.getAsAbstractPolygon();
+        ArrayList<Vect3d> L = b.getAsAbstractPolygon();
+        // превращаем каждое ребро вектором и добавляем в список векторов
+        ArrayList<Vector> vectors = new ArrayList<Vector>();
+        for (int i = 0; i < K.size(); i++) {
+            Vector v = new Vector(K.get(i), K.get((i + 1) % K.size()));
+            vectors.add(v);
         }
-        Vect3d center = new Vect3d();
-        for (Vect3d v : points) {
-            center.set_x(center.x() + v.x());
-            center.set_y(center.y() + v.y());
+        for (int i = 0; i < L.size(); i++) {
+            Vector v = new Vector(L.get(i), L.get((i + 1) % L.size()));
+            vectors.add(v);
         }
-        center.set_x(center.x() / points.size());
-        center.set_y(center.y() / points.size());
-
-        Collections.sort(points, new Comparator<Vect3d>() {
-            @Override
-            public int compare(Vect3d p1, Vect3d p2) {
-                double angle1 = Math.atan2(p1.y() - center.y(), p1.x() - center.x());
-                double angle2 = Math.atan2(p2.y() - center.y(), p2.x() - center.x());
-                if (angle1 < angle2) {
-                    return -1;
-                } else if (angle1 > angle2) {
-                    return 1;
-                } else {
-                    return 0;
+        
+        // объединяем векторы с одинаковым направлением
+        for (int i = 0; i < vectors.size(); i++) {
+            Vector v1 = vectors.get(i);
+            for (int j = i + 1; j < vectors.size(); j++) {
+                Vector v2 = vectors.get(j);
+                if (v1.sameDirection(v2)) {
+                    Vector v3 = new Vector(v1.start, v2.end);
+                    vectors.set(i, v3);
+                    vectors.remove(j);
+                    j--;
                 }
             }
-        });
-        List<Vect3d> uniqueVertices = new ArrayList<>();
-        uniqueVertices.add(points.get(0));
-        for (int i = 1; i < points.size(); i++) {
-            Vect3d prev = uniqueVertices.get(uniqueVertices.size() - 1);
-            Vect3d curr = points.get(i);
-            if (prev.x() != curr.x() || prev.y() != curr.y()) {
-                uniqueVertices.add(curr);
-            }
         }
-        System.out.println("Было точек до выпуклой оболочки");
-        System.out.println(uniqueVertices.size());
-        _points = (ArrayList<Vect3d>) convexHull(uniqueVertices);
-        System.out.println("Стало после выпуклой оболочки");
-        System.out.println(_points.size());
-  }
+
+        // сортируем векторы по углу относительно оси x
+        Collections.sort(vectors, new Comparator<Vector>() {
+            public int compare(Vector v1, Vector v2) {
+                double angle1 = Math.atan2(v1.y, v1.x);
+                double angle2 = Math.atan2(v2.y, v2.x);
+                if (angle1 < angle2)
+                    return -1;
+                else if (angle1 > angle2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+        
+        ArrayList<Rib3d> vs = new ArrayList<Rib3d>();
+        
+        // строим ломаную линию по векторам
+        Vect3d o = new Vect3d(0, 0, 0);
+        for (Vector v : vectors) {
+            vs.add(new Rib3d(o, new Vect3d(o.x() + v.x, o.y() + v.y, 0)));
+        }
+        _vectors = vs;
+        
+        ArrayList<Vect3d> sum = new ArrayList<Vect3d>();
+        // строим ломаную линию по векторам
+        Vect3d start = new Vect3d(0, 0, 0);
+        sum.add(start);
+        for (Vector v : vectors) {
+            Vect3d end = new Vect3d(start.x() + v.x, start.y() + v.y, 0);
+            sum.add(end);
+            start = end;
+        }
+
+        _points = sum;
+    }
 
   /**
    * Constructor of cube by points:
@@ -200,4 +273,20 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
   public GeomType type() {
     return GeomType.CUBE3D;
   }
+}
+
+class Vector {
+    public double x, y;
+    public Vect3d start, end;
+
+    public Vector(Vect3d start, Vect3d end) {
+        this.start = start;
+        this.end = end;
+        this.x = end.x() - start.x();
+        this.y = end.y() - start.y();
+    }
+
+    public boolean sameDirection(Vector v) {
+        return Math.abs(x * v.y - y * v.x) < 1e-9;
+    }
 }

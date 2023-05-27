@@ -187,6 +187,10 @@ public class MinkowskiBody extends BodyAdapter {
   public i_Geom getGeom() {
     return _minkowskiResult;
   }
+  
+  public ArrayList<Rib3d> getVectors() {
+    return _minkowskiResult.getVectors();
+  }
 
   @Override
   public i_Body getBody (String id, String title, i_Geom geom) {

@@ -156,7 +156,8 @@ public enum ModeList implements i_ActionFactory {
   MODE_CREATE_HYPERBOLOID_OF_TWO_SHEET,
   MODE_CIRCLE_IN_ANGLE,
   MODE_CREATE_POINT_ON_SPHERE,
-  MODE_CREATE_CUBOCTAHEDRON;
+  MODE_CREATE_CUBOCTAHEDRON,
+  MODE_CREATE_MINKOWSKI_SUM_2D;
 
   /**
    * Если нет аргументов, то режим устанавливается на главное полотно, если есть аргумент, то это -
@@ -599,6 +600,9 @@ public enum ModeList implements i_ActionFactory {
         break;
       case MODE_CREATE_RHOMBICDODECAHEDRON:
         mode = new CreateRhombicDodecahedronMode(ctrl);
+        break;
+    case MODE_CREATE_MINKOWSKI_SUM_2D:
+        mode = new CreateMinkowski2dMode(ctrl);
         break;
       default:
         throw new AssertionError(this.name());
