@@ -8,15 +8,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
+import geom.ColoredVector3d;
+import opengl.colorgl.ColorGL;
 
 /**
  * @author alexeev
  */
 public class Minkowski2d implements i_Geom, i_OrientableGeom {
   private ArrayList<Vect3d> _points;
-  private ArrayList<Rib3d> _vectors;
+  private ArrayList<ColoredVector3d> _vectors;
 
-    public ArrayList<Rib3d> getVectors() {
+    public ArrayList<ColoredVector3d> getVectors() {
         return _vectors;
     }
 
@@ -86,23 +88,23 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
         ArrayList<Vect3d> K = a.getAsAbstractPolygon();
         ArrayList<Vect3d> L = b.getAsAbstractPolygon();
         // превращаем каждое ребро вектором и добавляем в список векторов
-        ArrayList<Vector> vectors = new ArrayList<Vector>();
+        ArrayList<ColoredVector3d> vectors = new ArrayList<ColoredVector3d>();
         for (int i = 0; i < K.size(); i++) {
-            Vector v = new Vector(K.get(i), K.get((i + 1) % K.size()));
+            ColoredVector3d v = new ColoredVector3d(K.get(i), K.get((i + 1) % K.size()));
             vectors.add(v);
         }
         for (int i = 0; i < L.size(); i++) {
-            Vector v = new Vector(L.get(i), L.get((i + 1) % L.size()));
+            ColoredVector3d v = new ColoredVector3d(L.get(i), L.get((i + 1) % L.size()));
             vectors.add(v);
         }
         
         // объединяем векторы с одинаковым направлением
         for (int i = 0; i < vectors.size(); i++) {
-            Vector v1 = vectors.get(i);
+            ColoredVector3d v1 = vectors.get(i);
             for (int j = i + 1; j < vectors.size(); j++) {
-                Vector v2 = vectors.get(j);
+                ColoredVector3d v2 = vectors.get(j);
                 if (v1.sameDirection(v2)) {
-                    Vector v3 = new Vector(v1.start, v2.end);
+                    ColoredVector3d v3 = new ColoredVector3d(v1.start, v2.end);
                     vectors.set(i, v3);
                     vectors.remove(j);
                     j--;
@@ -111,8 +113,8 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
         }
 
         // сортируем векторы по углу относительно оси x
-        Collections.sort(vectors, new Comparator<Vector>() {
-            public int compare(Vector v1, Vector v2) {
+        Collections.sort(vectors, new Comparator<ColoredVector3d>() {
+            public int compare(ColoredVector3d v1, ColoredVector3d v2) {
                 double angle1 = Math.atan2(v1.y, v1.x);
                 double angle2 = Math.atan2(v2.y, v2.x);
                 if (angle1 < angle2)
@@ -124,12 +126,11 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
             }
         });
         
-        ArrayList<Rib3d> vs = new ArrayList<Rib3d>();
+        ArrayList<ColoredVector3d> vs = new ArrayList<ColoredVector3d>();
         
-        // строим ломаную линию по векторам
         Vect3d o = new Vect3d(0, 0, 0);
-        for (Vector v : vectors) {
-            vs.add(new Rib3d(o, new Vect3d(o.x() + v.x, o.y() + v.y, 0)));
+        for (ColoredVector3d v : vectors) {
+            vs.add(new ColoredVector3d(o, new Vect3d(o.x() + v.x, o.y() + v.y, 0)));
         }
         _vectors = vs;
         
@@ -137,7 +138,78 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
         // строим ломаную линию по векторам
         Vect3d start = new Vect3d(0, 0, 0);
         sum.add(start);
-        for (Vector v : vectors) {
+        for (ColoredVector3d v : vectors) {
+            Vect3d end = new Vect3d(start.x() + v.x, start.y() + v.y, 0);
+            sum.add(end);
+            start = end;
+        }
+
+        _points = sum;
+    }
+    
+    public Minkowski2d(i_Body a1, i_Body b1, ColorGL color_a1, ColorGL color_a2) throws ExDegeneration {
+        Polygon3d a = (Polygon3d) a1.getGeom();
+        Polygon3d b = (Polygon3d) b1.getGeom();
+        
+        
+        ArrayList<Vect3d> K = a.getAsAbstractPolygon();
+        ArrayList<Vect3d> L = b.getAsAbstractPolygon();
+        // превращаем каждое ребро вектором и добавляем в список векторов
+        ArrayList<ColoredVector3d> vectors = new ArrayList<ColoredVector3d>();
+        for (int i = 0; i < K.size(); i++) {
+            ColoredVector3d v = new ColoredVector3d(K.get(i), K.get((i + 1) % K.size()));
+            v.setColor(color_a1);
+            vectors.add(v);
+        }
+        for (int i = 0; i < L.size(); i++) {
+            ColoredVector3d v = new ColoredVector3d(L.get(i), L.get((i + 1) % L.size()));
+            v.setColor(color_a2);
+            vectors.add(v);
+        }
+        
+        // объединяем векторы с одинаковым направлением
+        for (int i = 0; i < vectors.size(); i++) {
+            ColoredVector3d v1 = vectors.get(i);
+            for (int j = i + 1; j < vectors.size(); j++) {
+                ColoredVector3d v2 = vectors.get(j);
+                if (v1.sameDirection(v2)) {
+                    ColoredVector3d v3 = new ColoredVector3d(v1.start, v2.end);
+                    vectors.set(i, v3);
+                    vectors.remove(j);
+                    j--;
+                }
+            }
+        }
+
+        // сортируем векторы по углу относительно оси x
+        Collections.sort(vectors, new Comparator<ColoredVector3d>() {
+            public int compare(ColoredVector3d v1, ColoredVector3d v2) {
+                double angle1 = Math.atan2(v1.y, v1.x);
+                double angle2 = Math.atan2(v2.y, v2.x);
+                if (angle1 < angle2)
+                    return -1;
+                else if (angle1 > angle2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+        
+        ArrayList<ColoredVector3d> vs = new ArrayList<ColoredVector3d>();
+        
+        Vect3d o = new Vect3d(0, 0, 0);
+        for (ColoredVector3d v : vectors) {
+            ColoredVector3d colored_v = new ColoredVector3d(o, new Vect3d(o.x() + v.x, o.y() + v.y, 0));
+            colored_v.setColor(v.getColor());
+            vs.add(colored_v);
+        }
+        _vectors = vs;
+        
+        ArrayList<Vect3d> sum = new ArrayList<Vect3d>();
+        // строим ломаную линию по векторам
+        Vect3d start = new Vect3d(0, 0, 0);
+        sum.add(start);
+        for (ColoredVector3d v : vectors) {
             Vect3d end = new Vect3d(start.x() + v.x, start.y() + v.y, 0);
             sum.add(end);
             start = end;
@@ -273,20 +345,4 @@ public class Minkowski2d implements i_Geom, i_OrientableGeom {
   public GeomType type() {
     return GeomType.CUBE3D;
   }
-}
-
-class Vector {
-    public double x, y;
-    public Vect3d start, end;
-
-    public Vector(Vect3d start, Vect3d end) {
-        this.start = start;
-        this.end = end;
-        this.x = end.x() - start.x();
-        this.y = end.y() - start.y();
-    }
-
-    public boolean sameDirection(Vector v) {
-        return Math.abs(x * v.y - y * v.x) < 1e-9;
-    }
 }

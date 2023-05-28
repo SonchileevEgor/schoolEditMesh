@@ -1,33 +1,21 @@
 package gui.mode;
 
 import bodies.BodyType;
-import bodies.MinkowskiBody;
 import bodies.TriangleBody;
 import static builders.BodyBuilder.BLDKEY_A;
-import static builders.BodyBuilder.BLDKEY_ANGLE;
 import static builders.BodyBuilder.BLDKEY_B;
-import static builders.BodyBuilder.BLDKEY_POINT_NUM;
 import builders.MinkowskiSumBuilder;
-import builders.RegularPolygonBuilder;
 import static config.Config.LOG_LEVEL;
 import editor.ExNoBody;
 import editor.i_Body;
 import geom.ExDegeneration;
-import geom.ExGeom;
 import geom.Minkowski2d;
-import geom.Polygon3d;
-import geom.Rib3d;
+import geom.ColoredVector3d;
 import geom.Vect3d;
 import gui.EdtController;
 import gui.IconList;
 import gui.dialog.ChoosePointNamesDialog;
-import static gui.mode.CreateBodyMode._param;
-import static gui.mode.ScreenMode.checker;
-import static gui.mode.param.CreateModeParamType.ROT_ANGLE;
 import static gui.mode.param.CreateModeParamType.VERT_NUMBER;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +23,6 @@ import javax.swing.Icon;
 import opengl.Drawer;
 import opengl.Render;
 import opengl.TypeArrow;
-import opengl.TypeFigure;
 import opengl.colorgl.ColorGL;
 import util.Log;
 import util.Util;
@@ -67,33 +54,40 @@ public class CreateMinkowski2dMode extends CreateBodyMode {
 
   @Override
   protected void nativeDraw1(Render ren) {
-//    if (_numOfChosenAnchors == 0) {
+//    if (_numOfChosenAnchors == 1) {
 //        MinkowskiSumBuilder builder = new MinkowskiSumBuilder("ТЕСТ123");
 //        builder.setValue(BLDKEY_A, _ctrl.getFocusCtrl().getFocusedBodies().get(0));
 //        builder.setValue(BLDKEY_B, _ctrl.getFocusCtrl().getFocusedBodies().get(1));
         Minkowski2d sumRes = null;
         try {
-            sumRes = new Minkowski2d(_ctrl.getBody(_ctrl.getFocusCtrl().getFocusedBodies().get(0)), _ctrl.getBody(_ctrl.getFocusCtrl().getFocusedBodies().get(1)));
-        } catch (ExNoBody ex) {
+            sumRes = new Minkowski2d(
+                    _ctrl.getBody(_ctrl.getFocusCtrl().getFocusedBodies().get(0)), 
+                    _ctrl.getBody(_ctrl.getFocusCtrl().getFocusedBodies().get(1)),
+                    _ctrl.getEditor().getBodySurfaceColor(_ctrl.getFocusCtrl().getFocusedBodies().get(0)),
+                    _ctrl.getEditor().getBodySurfaceColor(_ctrl.getFocusCtrl().getFocusedBodies().get(1)));
+        }catch (ExNoBody ex) {
             Logger.getLogger(CreateMinkowski2dMode.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExDegeneration ex) {
-            Logger.getLogger(CreateMinkowski2dMode.class.getName()).log(Level.SEVERE, null, ex);
-        }
+          Logger.getLogger(CreateMinkowski2dMode.class.getName()).log(Level.SEVERE, null, ex);
+      }
+//        MinkowskiBody bd = (MinkowskiBody) builder.create(_ctrl.getEditor(), null);
+      
 //        MinkowskiBody bd = (MinkowskiBody) builder.create(_ctrl.getEditor(), null);
 
-        Drawer.setObjectColor(ren, ColorGL.RED);
         Drawer.setLineWidth(ren, 2.0);
-        ArrayList<Rib3d> vects = sumRes.getVectors();
+        ArrayList<ColoredVector3d> vects = sumRes.getVectors();
         for (int i = 0; i < vects.size(); i++) {
-            Drawer.draw2DArrow(ren, vects.get(i).a(), vects.get(i).b(), TypeArrow.ONE_END);
+            Drawer.setObjectColor(ren, vects.get(i).getColor());
+            Drawer.draw2DArrow(ren, vects.get(i).start, vects.get(i).end, TypeArrow.ONE_END);
 //            Drawer.drawLine(ren, vects.get(i).a(), vects.get(i).b());
         }
+//    }
         
 //        _numOfChosenAnchors++;
 //
 //    _ctrl.add(builder, null, false);
 //    }
-
+//    _numOfChosenAnchors++;
   }
 
   @Override
