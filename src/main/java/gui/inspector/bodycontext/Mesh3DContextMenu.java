@@ -22,6 +22,8 @@ public class Mesh3DContextMenu extends BodyContextMenu {
         add(MenuItemFactory.createRemoveMI(ctrl, bodyID));
 
         addSeparator();
+        add(MenuItemFactory.printMesh3d(ctrl, bodyID));
+        addSeparator();
 
         add(MenuItemFactory.createParamsMI(ctrl, bodyID));
     }

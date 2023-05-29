@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import maquettes.EarClipping;
 import util.Fatal;
 import util.Util;
 
@@ -98,5 +99,9 @@ public class MeshBody extends BodyAdapter {
   public Vect3d intersectWithRay(Render ren, Ray3d ray, double x, double y) {
       return new Vect3d();
 //    return Util.getClosestPointToCamera(_cube.intersect(ray), ren.getCameraPosition().eye());
+  }
+  
+  public void print3d() {
+    EarClipping triangulatedBody = new EarClipping(getAllVertices());
   }
 };

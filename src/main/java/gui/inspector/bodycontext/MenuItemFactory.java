@@ -144,6 +144,26 @@ public class MenuItemFactory {
     return mi;
   }
   
+  public static JMenuItem printMesh3d(final EdtController ctrl, final String bodyID) throws ExNoBody {
+    JMenuItem mi = new JMenuItem("3Д печать сетки", IconList.POLYGON.getMediumIcon());
+    mi.addActionListener(new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        i_Body bd = null;
+        try {
+            bd = ctrl.getBody(bodyID);
+        } catch (ExNoBody ex) {
+            Logger.getLogger(MenuItemFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        MeshBody meshBody = (MeshBody) bd;
+        meshBody.
+
+    }
+  });
+    return mi;
+  }
+  
   public static JMenuItem buildRhombicDod(final EdtController ctrl, final String bodyID) throws ExNoBody {
     i_Body bd = ctrl.getBody(bodyID);
     JMenuItem mi;
