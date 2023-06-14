@@ -14,11 +14,11 @@ import opengl.colorgl.ColorGL;
 import opengl.sceneparameters.CameraPosition;
 import opengl.sceneparameters.ViewMode;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
+import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 import java.util.ArrayList;
 import java.util.List;
 import static util.Util.getCoefPlane;

@@ -62,8 +62,7 @@ public enum CreateDialogActionFactory implements i_ActionFactory {
   LINE_SECTION,
   RIB_SECTION,
   POLY_SECTION,
-  PLANE_PROJECTION,
-  CUBOCTAHEDRON
+  PLANE_PROJECTION
   ;
 
   @Override
@@ -859,21 +858,6 @@ public enum CreateDialogActionFactory implements i_ActionFactory {
             @Override
             public void actionPerformed(ActionEvent e) {
               showCreateDialog(ctrl, new PolySectionDialog(ctrl, ctrl.error().getStatusStripHandler()));
-            }
-            @Override
-            public void updateEditorState() {
-              setEnabled(ctrl.containsAnchors(AnchorType.ANC_POLY, 1));
-            }
-          };
-      case CUBOCTAHEDRON:
-        return new EdtAction(ctrl,
-          "<html><strong>Пересечение</strong><br>грани с объектом на сцене",
-          "<html><strong>Пересечение</strong><br>грани с объектом на сцене",
-          IconList.CURVE_INTERSECT.getLargeIcon(),
-          IconList.CURVE_INTERSECT.getLargeIcon()){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              showCreateDialog(ctrl, new CreateCuboctahedronDialog(ctrl, ctrl.error().getStatusStripHandler()));
             }
             @Override
             public void updateEditorState() {

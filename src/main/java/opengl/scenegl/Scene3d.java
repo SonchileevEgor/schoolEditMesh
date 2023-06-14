@@ -3,8 +3,8 @@ package opengl.scenegl;
 import opengl.Drawer;
 import editor.Editor;
 import geom.Vect3d;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
 import opengl.sceneparameters.CameraPosition;
 import opengl.sceneparameters.GluPerspectiveParameters;
 

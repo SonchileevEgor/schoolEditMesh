@@ -1,48 +1,54 @@
 package opengl.scenegl;
 
-import com.jogamp.common.nio.Buffers;
 import editor.Editor;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import maquettes.ColorPoint;
+import editor.i_Anchor;
 import opengl.Drawer;
 import geom.Vect3d;
+import java.awt.Color;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.Mesh3D;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 import java.util.ArrayList;
 import java.util.List;
-import com.jogamp.opengl.GLAutoDrawable;
+import javax.media.opengl.GLAutoDrawable;
+import maquettes.ArcCover;
+import maquettes.CoverContainer;
 import maquettes.ImportCover;
 import maquettes.PLYReader;
 import maquettes.i_Cover;
+import opengl.colorgl.ColorGL;
 import opengl.sceneparameters.CameraPosition;
 import opengl.sceneparameters.GluPerspectiveParameters;
 import org.apache.commons.io.FilenameUtils;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.WETriangleMesh;
 
-import static com.jogamp.opengl.GL.GL_FLOAT;
-
 /**
- * Класс для отображения 3D-моделей.
- * @author Kurgansky
+ * Created by Maks on 2/13/2015.
+ * @author Vladimir
  */
 public class SceneSTL extends SceneGL {
   PLYReader _plyReader;
   STLReader _stlReader;
   Editor _edt;
-
-  //список мешей соотсвествует по индексам списку VBOMesh
-  //получаем пары вида WETriangleMesh-VBOMesh
-  ArrayList<WETriangleMesh> _meshes = new ArrayList<>();
-  ArrayList<VBOMesh> _vbo = new ArrayList<>();
+  public ArrayList<WETriangleMesh> _meshes = new ArrayList<>();
 
   public SceneSTL(Editor edt) {
       super(edt);
       _edt = edt;
+  }
+  
+  public SceneSTL(Editor edt, CameraPosition cam, String stlFileName) throws IOException{
+    super(edt, cam);
+    _edt = edt;
+    loadSTL(stlFileName);
+    for (WETriangleMesh mesh : _meshes) {
+        i_Cover cover = new ImportCover(mesh);
+        edt.addCover(cover);
+    }
   }
 
   public SceneSTL(Editor edt, String stlFileName) throws IOException{
@@ -60,64 +66,93 @@ public class SceneSTL extends SceneGL {
       _edt = edt;
       _plyReader = null;
       _stlReader = null;
-
       for (i_Cover cover : covers){
-        edt.addCover(cover);
+          Mesh3D mesh = cover.getMesh();
+          //mesh.faceOutwards();
+          _meshes.add((WETriangleMesh) mesh);
+          edt.addCover(cover);
       }
-      addCovers(covers);
+  }
+  
+  public SceneSTL(Editor edt, ArrayList<Mesh3D> meshes) {
+      super(edt);
+      _edt = edt;
+      _plyReader = null;
+      _stlReader = null;
+      for (Mesh3D mesh : meshes) {
+          mesh.faceOutwards();
+          _meshes.add((WETriangleMesh) mesh);
+          i_Cover cover = new ImportCover((WETriangleMesh) mesh);
+          edt.addCover(cover);
+      }
   }
 
-  /**
-   * Метод для загрузки на сцену 3D-модели в формате stl / ply
-   * @param stlFileName - путь к файлу с моделью
-   */
-  public final void loadSTL(String stlFileName) throws IOException{
+  public final void loadSTL(String stlFileName) throws FileNotFoundException, IOException{
     if (FilenameUtils.getExtension(stlFileName).equals("ply")) { 
         _plyReader = new PLYReader(stlFileName);
         _meshes.add(_plyReader.loadPLY());
-        _vbo.add(new VBOMesh());
     } else if (FilenameUtils.getExtension(stlFileName).equals("stl")) {
         _stlReader = new STLReader();
-        _meshes.add((WETriangleMesh) _stlReader.loadBinary(stlFileName, WETriangleMesh.class)
-            .faceOutwards());
-        _vbo.add(new VBOMesh());
+        _meshes.add((WETriangleMesh) _stlReader.loadBinary(stlFileName, WETriangleMesh.class));
     }
+    _meshes.get(_meshes.size() - 1).faceOutwards();
   }
 
   @Override
   public void drawObjects() {
     GL2 gl = render.getGL();
-    gl.glEnable(GL2.GL_LIGHTING);
-    gl.glEnable(GL2.GL_LIGHT0);
-    gl.glEnable(GL2.GL_DEPTH_TEST);
-    gl.glEnable(GL2.GL_COLOR_MATERIAL);
+    render.getGL().glEnable(GL2.GL_LIGHTING);
+    render.getGL().glEnable(GL2.GL_DEPTH_TEST);
+    
+    Vect3d a = new Vect3d();
+    Vect3d b = new Vect3d();
+    Vect3d c = new Vect3d();
+    
+    gl.glBegin(GL2.GL_TRIANGLES);
+    for(WETriangleMesh mesh : _meshes)
+        for (Face face : mesh.getFaces()) {
+          a.set(face.a.x, face.a.y, face.a.z);
+          b.set(face.b.x, face.b.y, face.b.z);
+          c.set(face.c.x, face.c.y, face.c.z);
 
-    gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
-    gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
-    gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+          double [] normal = new double[3];
+          normal[0] = (double)face.normal.x();
+          normal[1] = (double)face.normal.y();
+          normal[2] = (double)face.normal.z();
 
-    for (VBOMesh vbo : _vbo) {
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBOColors);
-      gl.glColorPointer(4, GL_FLOAT, 0, 0);
+          gl.glNormal3dv(normal, 0);
+          
+          if (_plyReader != null) {
+                int red = (_plyReader._vertexColor[face.a.id][0] 
+                    + _plyReader._vertexColor[face.b.id][0]
+                    + _plyReader._vertexColor[face.c.id][0]) / 3,
+                green = (_plyReader._vertexColor[face.a.id][1] 
+                    + _plyReader._vertexColor[face.b.id][1]
+                    + _plyReader._vertexColor[face.c.id][1]) / 3,
+                blue = (_plyReader._vertexColor[face.a.id][2] 
+                    + _plyReader._vertexColor[face.b.id][2]
+                    + _plyReader._vertexColor[face.c.id][2]) / 3; 
 
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBONormals);
-      gl.glNormalPointer(GL_FLOAT, 0, 0);
+            Drawer.setObjectColor(render, new ColorGL(red / 255.0, green / 255.0, blue / 255.0));
+          } else {
+              CoverContainer covers = _edt.covers();
+              ColorGL color = null;
+              for (i_Cover cover : covers.getCovers())
+                  if (cover.getMesh().equals(mesh)){ 
+                        color = cover.getChosen()? 
+                                cover.getCover().getPointCover().get(0).getColor().emphasize() 
+                                : cover.getCover().getPointCover().get(0).getColor();
+                        break;
+                  } else color = new ColorGL(Color.LIGHT_GRAY);
+              Drawer.setObjectColor(render, color);
+          }
 
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBOVertices);
-      gl.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-      gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, vbo.VBOIndices);
-      gl.glDrawElements(GL2.GL_TRIANGLES, vbo.indices.capacity(), GL2.GL_UNSIGNED_INT, 0);
-    }
-
-    gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
-    gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
-    gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-    gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
-    gl.glDisable(GL2.GL_COLOR_MATERIAL);
-    gl.glDisableClientState(GL2.GL_COLOR_ARRAY);
+          gl.glVertex3d(face.a.x, face.a.y, face.a.z);
+          gl.glVertex3d(face.b.x, face.b.y, face.b.z);
+          gl.glVertex3d(face.c.x, face.c.y, face.c.z);
+        }
+    gl.glEnd();
   }
-
 
   @Override
   public boolean is3d() {
@@ -133,98 +168,9 @@ public class SceneSTL extends SceneGL {
     float lmodel_ambient[] = {1.0f, 1.0f, 1.0f, 1f};
     gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, lmodel_ambient, 0);
     gl.glLightModeli(GL2.GL_LIGHT_MODEL_TWO_SIDE, GL2.GL_TRUE);
-    gl.glLightModeli(GL2.GL_LIGHT_MODEL_COLOR_CONTROL, GL2.GL_TRUE);
 
-    gl.glEnable(GL2.GL_LIGHTING);
     gl.glEnable(GL2.GL_LIGHT0);
     gl.glEnable(GL2.GL_DEPTH_TEST);
-    gl.glEnable(GL2.GL_COLOR_MATERIAL);
-
-    for(WETriangleMesh mesh : _meshes) {
-      VBOMesh vbo = _vbo.get(_meshes.indexOf(mesh));
-
-      float[] vertices = mesh.getUniqueVerticesAsArray();
-
-      float[] normals = mesh.getNormalsForUniqueVerticesAsArray();
-
-      int[] index = mesh.getFacesAsArray();
-
-      //получаем цвет сетки (если он есть)
-      try {
-        if (_plyReader != null) {
-          vbo._colors = new float[_plyReader.vertexColor.length * 4];
-          int k = 0, j = 0;
-          while (k < _plyReader.vertexColor.length) {
-            vbo._colors[j++] = (float) (_plyReader.vertexColor[k][0] / 255.0);
-            vbo._colors[j++] = (float) (_plyReader.vertexColor[k][1] / 255.0);
-            vbo._colors[j++] = (float) (_plyReader.vertexColor[k][2] / 255.0);
-            vbo._colors[j++] = 1.0f;
-            k++;
-          }
-        } else {
-          vbo._colors = new float[vertices.length * 4];
-          int k = 0, j = 0;
-          while (k < vertices.length) {
-            vbo._colors[j++] = 0.5f;
-            vbo._colors[j++] = 0.5f;
-            vbo._colors[j++] = 0.5f;
-            vbo._colors[j++] = 1.0f;
-            k++;
-          }
-        }
-
-        vbo._isColor = true;
-      } catch (Exception ex) {
-        System.out.println("Ошибка при получении цвета сетки: " + ex.getMessage());
-      }
-
-      //инициализируем спец.буфферы для OpenGL
-      vbo.vert = Buffers.newDirectFloatBuffer(vertices.length);
-      vbo.vert.put(vertices);
-      vbo.vert.flip();
-
-      vbo.norm = Buffers.newDirectFloatBuffer(normals.length);
-      vbo.norm.put(normals);
-      vbo.norm.flip();
-
-      vbo.color = Buffers.newDirectFloatBuffer(vbo._colors.length);
-      vbo.color.put(vbo._colors);
-      vbo.color.flip();
-
-      vbo.indices = Buffers.newDirectIntBuffer(index.length);
-      vbo.indices.put(index);
-      vbo.indices.flip();
-
-      //загружаем буферы в GPU
-      int[] temp = new int[3];
-      gl.glGenBuffers(3, temp, 0);
-
-      vbo.VBOVertices = temp[0];
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBOVertices);
-      gl.glBufferData(GL2.GL_ARRAY_BUFFER, vbo.vert.capacity() * Buffers.SIZEOF_FLOAT,
-          vbo.vert, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
-
-      vbo.VBONormals = temp[1];
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBONormals);
-      gl.glBufferData(GL2.GL_ARRAY_BUFFER, vbo.norm.capacity() * Buffers.SIZEOF_FLOAT,
-          vbo.norm, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
-
-      vbo.VBOIndices = temp[2];
-      gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, vbo.VBOIndices);
-      gl.glBufferData(GL2.GL_ELEMENT_ARRAY_BUFFER, vbo.indices.capacity() * Buffers.SIZEOF_INT,
-          vbo.indices, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
-
-      int[] col = new int[1];
-      gl.glGenBuffers(1, col, 0);
-      vbo.VBOColors = col[0];
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vbo.VBOColors);
-      gl.glBufferData(GL2.GL_ARRAY_BUFFER, vbo.color.capacity() * Buffers.SIZEOF_FLOAT,
-          vbo.color, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
-    }
   }
 
   @Override
@@ -257,75 +203,13 @@ public class SceneSTL extends SceneGL {
     render.getViewVolume().disableClippingPlanes(render);
   }
 
-  private void addCovers(List<i_Cover> covers) {
-    for (i_Cover cover : covers){
-      Mesh3D mesh = cover.getMesh();
-      VBOMesh vbo = new VBOMesh();
-      //сохраняем цвета в буфер
-      int k = 0;
-      vbo._colors = new float[cover.getCover().getPointCover().size() * 4];
-      for (ColorPoint cp : cover.getCover().getPointCover()) {
-        vbo._colors[k++] = (float)cp.getColor().getRed();
-        vbo._colors[k++] = (float)cp.getColor().getGreen();
-        vbo._colors[k++] = (float)cp.getColor().getBlue();
-        vbo._colors[k++] = (float)cp.getColor().getAlpha();
-      }
-      vbo._isColor = true;
-
+  public void addMesh(Mesh3D mesh) {
+      mesh.faceOutwards();
       _meshes.add((WETriangleMesh) mesh);
-      _vbo.add(vbo);
-    }
   }
   
-  @Override
-  public SceneType getSceneType() {
-      return SceneType.SceneSTL;
-  }
-
-  public void reload(List<i_Cover> covers){
-    _vbo.clear();
-    _meshes.clear();
-    addCovers(covers);
-    init(render.getDrawable());
-    initPerspectiveParameters();
-  }
-
-
-  public WETriangleMesh getMesh(int index) {
-    return _meshes.get(index);
-  }
-
-  public int getMeshesSize() {
-    return _meshes.size();
-  }
-
-  /**
-   * Находит дистанцию от 0 до проекции на какую-то ось самой удалённой точки
-   * @return
-   */
-  public double getMaxDistance() {
-    double result = 0;
-
-    for (WETriangleMesh mesh : _meshes) {
-      Vec3D v = mesh.getBoundingBox().getExtent();
-      result = Math.max(Math.abs(v.x()), Math.max(Math.abs(v.y()),
-          Math.max(Math.abs(v.z()), result)));
+    @Override
+    public SceneType getSceneType() {
+        return SceneType.SceneSTL;
     }
-
-    return result;
-  }
-
-  /**
-   * Класс предназначен для того, чтобы отрисовывать каждый меш на GPU
-   *
-   * @author Kurgansky
-   */
-  class VBOMesh {
-    int VBOVertices, VBONormals, VBOIndices, VBOColors;
-    IntBuffer indices;
-    FloatBuffer vert, norm, color;
-    boolean _isColor = false;
-    float[] _colors;
-  }
 }
-

@@ -2,8 +2,8 @@ package opengl;
 
 import geom.Vect3d;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 import opengl.sceneparameters.CameraPosition;
 import opengl.sceneparameters.GluPerspectiveParameters;
 

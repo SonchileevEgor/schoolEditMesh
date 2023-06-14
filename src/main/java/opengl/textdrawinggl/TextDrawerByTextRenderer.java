@@ -6,7 +6,7 @@ import opengl.Render;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import geom.*;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 import java.awt.geom.Rectangle2D;
 
 /**

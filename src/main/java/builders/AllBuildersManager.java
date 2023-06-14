@@ -462,10 +462,6 @@ public class AllBuildersManager {
         return PairOfLinesBuilder.class;
       case ConicByFivePointsBuilder.ALIAS:
         return ConicByFivePointsBuilder.class;
-      case CuboctahedronBuilder.ALIAS:
-        return CuboctahedronBuilder.class;
-      case MeshBuilder.ALIAS:
-        return MeshBuilder.class;
       default:
         return null;
     }

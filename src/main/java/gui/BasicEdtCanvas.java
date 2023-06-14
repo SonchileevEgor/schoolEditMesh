@@ -1,8 +1,8 @@
 package gui;
 
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.awt.GLJPanel;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLJPanel;
 import opengl.i_RotationListener;
 import opengl.i_ScaleChangeListener;
 import opengl.scenegl.SceneGL;

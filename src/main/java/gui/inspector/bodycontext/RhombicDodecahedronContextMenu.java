@@ -15,8 +15,6 @@ public class RhombicDodecahedronContextMenu extends BodyContextMenu {
     add(MenuItemFactory.createVisMI(ctrl, bodyID));
     add(MenuItemFactory.createRemoveMI(ctrl, bodyID));
 
-    add(MenuItemFactory.buildRhombicDodMesh(ctrl, bodyID));
-    
     addSeparator();
 
     add(MenuItemFactory.createParamsMI(ctrl, bodyID));

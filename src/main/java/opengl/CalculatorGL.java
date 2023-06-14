@@ -6,8 +6,8 @@ import geom.Ray3d;
 import geom.Vect3d;
 import java.util.ArrayList;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
 import opengl.sceneparameters.CameraPosition;
 
 /**

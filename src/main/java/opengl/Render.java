@@ -5,9 +5,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import static config.Config.ANTIALIASING_ON;
 import editor.Editor;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.glu.GLU;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.glu.GLU;
 import java.awt.*;
 import java.util.ArrayList;
 import opengl.sceneparameters.CameraPosition;

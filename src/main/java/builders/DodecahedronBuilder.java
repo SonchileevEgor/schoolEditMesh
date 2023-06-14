@@ -1,6 +1,7 @@
 package builders;
 
 import bodies.DodecahedronBody;
+import static builders.BodyBuilder.BLDKEY_ALPHA;
 import builders.param.BuilderParam;
 import builders.param.BuilderParamType;
 import editor.Editor;

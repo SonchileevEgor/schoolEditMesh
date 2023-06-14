@@ -10,7 +10,6 @@ import editor.Editor;
 import geom.Cube3d;
 import geom.Plane3d;
 import geom.Vect3d;
-import opengl.*;
 import opengl.colorgl.ColorGL;
 import opengl.colortheme.CurrentTheme;
 import opengl.sceneparameters.CameraPosition;
@@ -20,12 +19,26 @@ import opengl.sceneparameters.ViewVolume;
 import opengl.textdrawinggl.TextDrawer;
 import util.Log;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLEventListener;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLEventListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import opengl.AxesDrawer;
+import opengl.ByteMask;
+import opengl.CalculatorGL;
+import opengl.Drawer;
+import opengl.ProjectionManager;
+import opengl.ProjectionMode;
+import static opengl.ProjectionMode.ORTHO_PROJECTION;
+import static opengl.ProjectionMode.PERSPECTIVE_PROJECTION;
+import opengl.Render;
+import opengl.ScreenSizeManager;
+import static opengl.sceneparameters.ViewMode.DOTTED_LINE;
+import static opengl.sceneparameters.ViewMode.FACES_TRANSPARENT;
+import static opengl.sceneparameters.ViewMode.LIGHT;
+import static opengl.sceneparameters.ViewMode.PENCIL;
 
 /**
  * Base class of Scenes classes

@@ -17,7 +17,7 @@ import toxi.geom.mesh.WETriangleMesh;
  */
 public class PLYReader {
     private final String _fileName;
-    public int[][] vertexColor;
+    public int[][] _vertexColor;
     
     public PLYReader(String fileName) throws FileNotFoundException{
         _fileName = fileName;
@@ -50,15 +50,15 @@ public class PLYReader {
     //добавить чтение нормалей
     private ArrayList<Vertex> saveVertex(ElementReader elemReader) throws IOException {
         ArrayList<Vertex> result = new ArrayList<>(elemReader.getCount());
-        vertexColor = new int[elemReader.getCount()][3];
+        _vertexColor = new int[elemReader.getCount()][3];
         int index = 0;
         Element elem = elemReader.readElement();
         while (elem != null){
             result.add(new Vertex(new Vec3D((float)elem.getDouble("x"), (float)elem.getDouble("y"), (float)elem.getDouble("z")), index));
             try {
-                vertexColor[index][0] = elem.getInt("red");
-                vertexColor[index][1] = elem.getInt("green");
-                vertexColor[index][2] = elem.getInt("blue");
+                _vertexColor[index][0] = elem.getInt("red");
+                _vertexColor[index][1] = elem.getInt("green");
+                _vertexColor[index][2] = elem.getInt("blue");
             } catch (Exception ex) {
             }
             

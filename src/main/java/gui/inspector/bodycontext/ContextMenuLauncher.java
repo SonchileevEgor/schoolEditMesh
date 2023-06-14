@@ -76,8 +76,6 @@ public class ContextMenuLauncher {
         case HYPERBOLE:
         case ELLIPSE:
           menu = new ArcContextMenu(ctrl, bodyID); break;
-        case MESH3D:
-          menu = new Mesh3DContextMenu(ctrl, bodyID); break;
         default:
           menu = new DefaultBodyContextMenu(ctrl, bodyID);
       }

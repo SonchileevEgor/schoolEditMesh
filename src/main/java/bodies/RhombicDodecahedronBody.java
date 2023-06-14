@@ -55,42 +55,6 @@ public class RhombicDodecahedronBody extends BodyAdapter {
     _alias = "ромбододекаэдр";
     _exists = true;
   }
-  
-    /**
-   * Constructor of rhombic_dodecahedron by 3 points
-   *
-   * @param id
-   * @param title
-   * @param a
-   * @param b
-   * @param c
-   * @throws geom.ExGeom
-   */
-  public RhombicDodecahedronBody(String id, String title, Vect3d a, Vect3d b, Vect3d c) throws ExGeom {
-    super(id, title);
-    _dod = new RhombicDodecahedron3d(a, b, c);
-    _alias = "ромбододекаэдр";
-    _exists = true;
-  }
-  
-  /**
-   * Constructor of rhombic_dodecahedron by rhomb
-   *
-   * @param id
-   * @param title
-   * @param a
-   * @param b
-   * @param c
-   * @param d
-   * @param direction
-   * @throws geom.ExGeom
-   */
-  public RhombicDodecahedronBody(String id, String title, Vect3d a, Vect3d b, Vect3d c, Vect3d d, String direction) throws ExGeom {
-    super(id, title);
-    _dod = new RhombicDodecahedron3d(a, b, c, d, direction);
-    _alias = "ромбододекаэдр";
-    _exists = true;
-  }
 
   /**
    * constructor for null-body

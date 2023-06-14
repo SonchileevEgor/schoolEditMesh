@@ -1,6 +1,6 @@
 package opengl;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 import java.util.HashMap;
 import java.util.Map;
 

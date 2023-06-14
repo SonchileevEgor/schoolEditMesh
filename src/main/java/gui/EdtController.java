@@ -48,8 +48,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
 import maquettes.i_Cover;
 import opengl.scenegl.SceneGL;
-import opengl.scenegl.SceneSTL;
-import opengl.scenegl.SceneType;
 import opengl.scenegl.i_GlobalModeChangeListener;
 import util.Log;
 
@@ -376,12 +374,7 @@ public class EdtController {
    * Adapt scale for editor.
    */
   public void fitEditor() {
-    double maxDistance = 0;
-    if (getScene().getSceneType() == SceneType.Scene3D || getScene().getSceneType() == SceneType.Scene2D) {
-      maxDistance = _edt.getMaxDistance();
-    } else if (getScene().getSceneType() == SceneType.SceneSTL){
-      maxDistance = ((SceneSTL)getScene()).getMaxDistance();
-    }
+    double maxDistance = _edt.getMaxDistance();
     double visibleSize = _canvas.getVisibleSize();
     while (maxDistance * 3 > visibleSize && visibleSize <= 10000) {
       visibleSize *= 1.25;
@@ -466,11 +459,6 @@ public class EdtController {
 
     // Список изменённых якорей
     // Их нужно оповестить об изменении
-    
-    System.out.println("А якоря у тела есть?");
-    System.out.println(body.getAnchors());
-    System.out.println("А якоря у тела есть?");
-    
     ArrayList<String> changedAnchors = new ArrayList<>();
 
     if (visible) {
@@ -518,35 +506,6 @@ public class EdtController {
    * @return
    */
   public boolean isBodyVisible(String bodyID){
-    try {
-      i_Body body = getBody(bodyID);
-
-      if (body.getState().hasParam(DisplayParam.VISIBLE)) {
-        return (boolean)body.getState().getParam(DisplayParam.VISIBLE);
-      }
-      if (body.type() == BodyType.POINT) {
-        i_Anchor a = getDuplicateAnchor(bodyID);
-        if( a != null ){
-          return a.isVisible();
-        } else {
-          return false;
-        }
-      }
-      for (String anchorID : body.getAnchors().values()) {
-        try {
-          i_Anchor a = getAnchor(anchorID);
-          if ((a.getAnchorType() != AnchorType.ANC_POINT) && a.isVisible()) {
-            return true;
-          }
-        } catch (ExNoAnchor ex) { }
-      }
-      return false;
-    } catch (ExNoBody ex) {}
-    return false;
-  }
-  
-  //ТЕСТ123
-  public boolean buildRhombicDod(String bodyID){
     try {
       i_Body body = getBody(bodyID);
 

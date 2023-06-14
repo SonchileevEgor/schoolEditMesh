@@ -6,7 +6,7 @@ import geom.ExDegeneration;
 import geom.Plane3d;
 import geom.Vect3d;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 import java.util.ArrayList;
 
 /**

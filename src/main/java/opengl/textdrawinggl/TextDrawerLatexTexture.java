@@ -6,7 +6,7 @@ import geom.ExDegeneration;
 import geom.Vect3d;
 import latex.ImageGenerator;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 import opengl.colorgl.ColorGL;
 import opengl.sceneparameters.CameraPosition;
 

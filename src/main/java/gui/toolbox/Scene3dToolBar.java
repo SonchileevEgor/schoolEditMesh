@@ -95,7 +95,6 @@ public class Scene3dToolBar extends EdtToolBar implements i_AppSettingsChangeLis
       add(ModeList.MODE_CREATE_ISOSCELES_TRAPEZE.getAction(_ctrl));
       add(ModeList.MODE_CREATE_RHOMBUS_BY_DIAGONAL.getAction(_ctrl));
       add(ModeList.MODE_CREATE_RHOMBUS_BY_SIDE_ANGLE.getAction(_ctrl));
-      add(ModeList.MODE_CREATE_MINKOWSKI_SUM_2D.getAction(_ctrl));
     }};
 
     _angleActionList = new ArrayList<EdtAction>(){{
@@ -126,7 +125,6 @@ public class Scene3dToolBar extends EdtToolBar implements i_AppSettingsChangeLis
       add(ModeList.MODE_CREATE_OCTAHEDRON.getAction(_ctrl));
       add(ModeList.MODE_CREATE_ICOSAHEDRON.getAction(_ctrl));
       add(ModeList.MODE_CREATE_DODECAHEDRON.getAction(_ctrl));
-      add(ModeList.MODE_CREATE_CUBOCTAHEDRON.getAction(_ctrl));
     }};
 
     _pyramidActionList = new ArrayList<EdtAction>(){{

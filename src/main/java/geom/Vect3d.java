@@ -102,12 +102,6 @@ public class Vect3d implements AbstractPolygon, i_Geom {
   public double norm() {
     return Math.sqrt(_x * _x + _y * _y + _z * _z);
   }
-  
-  public Vect3d normalize() {
-    double locLength = norm();
-    double inv_length = (1 / locLength);
-    return new Vect3d(_x*inv_length,_y*inv_length, _z*inv_length);
-  }
 
   /**
    * Квадрат нормы вектора.

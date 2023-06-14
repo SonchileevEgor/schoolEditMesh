@@ -470,8 +470,8 @@ public enum ActionFactory implements i_ActionFactory {
                               else type = MeshFileType.PLY;
                       }
                       WETriangleMesh mesh = new WETriangleMesh();
-                      for (int k = 0; k < ((SceneSTL)ctrl.getMainCanvasCtrl().getScene()).getMeshesSize(); k++)
-                        mesh.addMesh(((SceneSTL)ctrl.getMainCanvasCtrl().getScene()).getMesh(k));
+                      for (int k = 0; k < ((SceneSTL)ctrl.getMainCanvasCtrl().getScene())._meshes.size(); k++)
+                        mesh.addMesh(((SceneSTL)ctrl.getMainCanvasCtrl().getScene())._meshes.get(k));
                       if (type == MeshFileType.PLY) {
                             toxi.geom.mesh.PLYWriter out = new toxi.geom.mesh.PLYWriter();
                             out.saveMesh(mesh,fname);
@@ -1109,8 +1109,8 @@ public enum ActionFactory implements i_ActionFactory {
                       //TODO: сделать сохранение текущих изменений
                       String fname = config.Temp.CURRENT_FILE;
                       WETriangleMesh mesh = new WETriangleMesh();
-                      for (int k = 0; k < ((SceneSTL)ctrl.getStlCanvasCtrl().getScene()).getMeshesSize(); k++)
-                        mesh.addMesh(((SceneSTL)ctrl.getStlCanvasCtrl().getScene()).getMesh(k));
+                      for (int k = 0; k < ((SceneSTL)ctrl.getStlCanvasCtrl().getScene())._meshes.size(); k++)
+                        mesh.addMesh(((SceneSTL)ctrl.getStlCanvasCtrl().getScene())._meshes.get(k));
                       if ( "ply".equals(FilenameUtils.getExtension(fname))
                               || "PLY".equals(FilenameUtils.getExtension(fname))) {
                               toxi.geom.mesh.PLYWriter out = new toxi.geom.mesh.PLYWriter();

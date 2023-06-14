@@ -2,13 +2,17 @@ package opengl.sceneparameters;
 
 import geom.Checker;
 
-import com.jogamp.opengl.*;
-import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.glu.GLU;
+import javax.media.opengl.awt.GLCanvas;
+import javax.media.opengl.glu.GLU;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLEventListener;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Disabled;
@@ -64,7 +68,7 @@ public class GluPerspectiveParametersTest {
   }
 }
 
-class TestScene implements GLEventListener{
+class TestScene implements GLEventListener {
   GluPerspectiveParameters gluPerParam;
   double[] projection1 = new double[16];
   double[] projection2 = new double[16];

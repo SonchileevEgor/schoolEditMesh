@@ -6,7 +6,7 @@ import opengl.Render;
 import com.jogamp.opengl.util.gl2.GLUT;
 import geom.Vect3d;
 
-import com.jogamp.opengl.GL2;
+import javax.media.opengl.GL2;
 
 /**
  * Реализация отрисовки текста с помощью glutBitmapString.
