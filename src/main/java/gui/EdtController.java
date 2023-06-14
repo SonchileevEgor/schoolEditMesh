@@ -48,6 +48,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
 import maquettes.i_Cover;
 import opengl.scenegl.SceneGL;
+import opengl.scenegl.SceneSTL;
+import opengl.scenegl.SceneType;
 import opengl.scenegl.i_GlobalModeChangeListener;
 import util.Log;
 
